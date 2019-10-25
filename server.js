@@ -1,14 +1,23 @@
-const express = require('express');
+const express = require("express");
+const connectDatabase = require("./config/database");
 
 const app = express();
 
-app.get('/', (req, res) => {
-	res.json({ msg: 'Welcome to the Study Now Prototype' });
+connectDatabase();
+
+app.use(
+	express.json({
+		extended: false
+	})
+);
+
+app.get("/", (req, res) => {
+	res.json({ msg: "Welcome to the Study Now Prototype" });
 });
 
-app.use('/api/users', require('./routes/users'));
-app.use('/api/auth', require('./routes/auth'));
-app.use('/api/todo', require('./routes/todo'));
+app.use("/api/users", require("./routes/users"));
+app.use("/api/auth", require("./routes/auth"));
+app.use("/api/todo", require("./routes/todo"));
 
 const port = process.env.PORT || 5000;
 
