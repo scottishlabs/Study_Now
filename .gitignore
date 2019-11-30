@@ -1,1 +1,5 @@
 /node_modules
+desktop.ini
+/middleware/desktop.ini
+/models/desktop.ini
+/routes/desktop.ini

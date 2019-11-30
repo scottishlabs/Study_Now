@@ -1,8 +1,11 @@
+const bcrypt = require("bcryptjs");
 const express = require("express");
+const jwt = require("jsonwebtoken");
 const router = express.Router();
+const config = require("config");
 const { check, validationResult } = require("express-validator");
 
-const user = require("../models/User");
+const User = require("../models/User");
 
 router.post(
 	"/",
@@ -18,7 +21,7 @@ router.post(
 			min: 6
 		})
 	],
-	(req, res) => {
+	async (req, res) => {
 		const errors = validationResult(req);
 		if (!errors.isEmpty()) {
 			return res.status(400).json({
@@ -26,7 +29,51 @@ router.post(
 			});
 		}
 
-		res.send("passed");
+		const { name, email, password } = req.body;
+
+		try {
+			let user = await User.findOne({ email });
+			if (user) {
+				return res.status(400).json({
+					msg: "FAILURE! ... User already exists"
+				});
+			}
+
+			user = new User({
+				name,
+				email,
+				password
+			});
+
+			const salt = await bcrypt.genSalt(10);
+
+			user.password = await bcrypt.hash(password, salt);
+
+			await user.save();
+
+			const payload = {
+				user: {
+					id: user.id
+				}
+			};
+
+			jwt.sign(
+				payload,
+				config.get("jwtSecret"),
+				{
+					expiresIn: 360000
+				},
+				(err, token) => {
+					if (err) throw err;
+					res.json({
+						token
+					});
+				}
+			);
+		} catch (err) {
+			console.error(err.message);
+			res.status(500).send("FAILURE! ... Server Error");
+		}
 	}
 );
 

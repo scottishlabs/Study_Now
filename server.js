@@ -17,10 +17,10 @@ app.get("/", (req, res) => {
 
 app.use("/api/users", require("./routes/users"));
 app.use("/api/auth", require("./routes/auth"));
-app.use("/api/todo", require("./routes/todo"));
+app.use("/api/todos", require("./routes/todos"));
 
 const port = process.env.PORT || 5000;
 
 app.listen(port, () => {
-	console.log(`App listening on port ${port}!`);
+	console.log(`SUCCESS! ... Listening on port ${port}`);
 });
