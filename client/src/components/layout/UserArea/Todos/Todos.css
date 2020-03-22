@@ -1,0 +1,56 @@
+:root {
+	--border-color: #eee;
+}
+
+.todoListArea {
+	height: 100vh;
+	padding: 0;
+}
+
+.todoList {
+	height: calc(100% - 70px);
+	overflow-y: scroll;
+	border: 5px solid var(--border-color);
+	border-radius: 3px;
+	background-color: var(--border-color);
+}
+
+.todoList::-webkit-scrollbar {
+	width: 0px;
+}
+
+.todoInfo {
+	display: none;
+	position: sticky;
+	top: 0;
+}
+.addTodo {
+	padding: 1rem 1rem 1rem 8rem;
+	background-color: #f9f9f9;
+}
+.todoItem {
+	display: flex;
+	flex-direction: row;
+}
+
+@media (min-width: 992px) {
+	.todoInfo {
+		height: 100vh;
+		display: block;
+		position: sticky;
+		top: 0;
+	}
+	.defaultIcon {
+		height: 100%;
+		font-size: 2rem;
+		align-items: center;
+		justify-content: center;
+		text-align: center;
+	}
+
+	.defaultIcon i {
+		display: block;
+		font-size: 10rem;
+		margin-bottom: 2.5rem;
+	}
+}

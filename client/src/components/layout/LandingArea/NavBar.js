@@ -8,6 +8,7 @@ import {
 	Typography,
 	Button
 } from '@material-ui/core';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -29,7 +30,7 @@ const HomeIcon = props => {
 	);
 };
 
-const Header = () => {
+const NavBar = () => {
 	const classes = useStyles();
 
 	return (
@@ -55,4 +56,4 @@ const Header = () => {
 	);
 };
 
-export default Header;
+export default NavBar;

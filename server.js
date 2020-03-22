@@ -1,5 +1,5 @@
-const express = require("express");
-const connectDatabase = require("./config/database");
+const express = require('express');
+const connectDatabase = require('./config/database');
 
 const app = express();
 
@@ -11,13 +11,13 @@ app.use(
 	})
 );
 
-app.get("/", (req, res) => {
-	res.json({ msg: "Welcome to the Study Now Prototype" });
+app.get('/', (req, res) => {
+	res.json({ msg: 'Welcome to the Study Now Prototype' });
 });
 
-app.use("/api/users", require("./routes/users"));
-app.use("/api/auth", require("./routes/auth"));
-app.use("/api/todos", require("./routes/todos"));
+app.use('/api/users', require('./routes/users'));
+app.use('/api/auth', require('./routes/auth'));
+app.use('/api/todos', require('./routes/todos'));
 
 const port = process.env.PORT || 5000;
 
