@@ -1,122 +1,181 @@
-import React, { useState } from 'react';
-import './Todos.css';
+import React, { useState, Fragment, useContext, useEffect } from 'react';
 import TodoItem from './TodoItem';
+import TodoContext from '../../../../context/todo/todoContext';
 
-const Todos = () => {
-	const [selected, setSelected] = useState(null);
-	const [todos, setTodos] = useState([
-		{
-			id: 1,
-			name: 'get milk',
-			description: 'Go to the supermarket and get milk',
-			isCompleted: false,
-			urgent: true,
-			important: true,
-			deadline: new Date(),
-			subTodos: [
-				{
-					id: 1,
-					name: 'go to supermarket',
-					isCompleted: true,
-					deadline: new Date()
-				},
-				{
-					id: 2,
-					name: 'get milk',
-					isCompleted: false,
-					deadline: new Date()
-				}
-			]
-		},
-		{
-			id: 2,
-			name: 'get bread 2',
-			description: 'go to the supermarket and get bread 2',
-			isCompleted: false,
-			urgent: true,
-			important: false,
-			deadline: new Date(),
-			subTodos: []
-		},
-		{
-			id: 3,
-			name: 'get bread 3',
-			description: 'go to the supermarket and get bread 3',
-			isCompleted: true,
-			urgent: false,
-			important: true,
-			deadline: new Date(),
-			subTodos: []
-		},
-		{
-			id: 4,
-			name: 'get bread 3',
-			description: 'go to the supermarket and get bread 3',
-			isCompleted: false,
-			urgent: false,
-			important: false,
-			deadline: new Date(),
-			subTodos: []
-		},
-		{
-			id: 5,
-			name: 'get bread 5',
-			description: 'go to the supermarket and get bread 5',
-			isCompleted: true,
-			urgent: false,
-			important: false,
-			deadline: new Date(),
-			subTodos: []
-		}
-	]);
+// Handles the display of the todos from context
+const Todos = ({ setIsActive }) => {
+	const todoContext = useContext(TodoContext);
+	const {
+		todos,
+		addTodo,
+		filtered,
+		filterTodos,
+		clearFilter,
+		prioritySort,
+		deadlineSort,
+		alphabeticalSort,
+	} = todoContext;
 
-	const isTodoSelected = () => {
-		if (selected == null) {
-			return (
-				<div className='d-flex flex-column defaultIcon'>
-					<i className='fas fa-check-square'></i>
-					Click a To-do to view details
-				</div>
-			);
+	// Initial state for a new todo
+	const [newTodo, setNewTodo] = useState({
+		name: '',
+		description: '',
+		isCompleted: false,
+		urgent: false,
+		important: false,
+		deadline: '',
+	});
+
+	// Initial state for the filter input
+	const [filter, setFilter] = useState('');
+
+	// Handles the adding of a new todo from state and pushes it to context
+	const handleAddTodo = () => {
+		if (newTodo.name !== '') {
+			clearFilter();
+			addTodo(newTodo);
+			setNewTodo({
+				name: '',
+				description: '',
+				isCompleted: false,
+				urgent: false,
+				important: false,
+				deadline: '',
+			});
 		}
 	};
 
-	const toggleTodo = ({ todo }) => {
-		todo.isCompleted = !todo.isCompleted;
+	// Clears the filter form and sets filtered context to null
+	const handleClearFilter = () => {
+		clearFilter();
+		setFilter('');
 	};
 
+	// Sorts the todos by A-Z
+	const handleSortAlphabetical = () => {
+		console.log('SORT STARTED');
+		alphabeticalSort();
+	};
+
+	// Sorts the todos by priority
+	const handleSortPriority = () => {
+		console.log('SORT STARTED');
+		prioritySort();
+	};
+
+	// Sorts the todos by deadline
+	const handleSortDeadline = () => {
+		console.log('SORT STARTED');
+		deadlineSort();
+	};
+
+	// Renders the todo list area
 	return (
-		<>
-			<div className='row h-100'>
-				<div className='todoListArea col-12 col-lg-7'>
-					<div className='addTodo input-group'>
+		<div className='todoListArea d-block m-auto col-lg-7'>
+			<div className='addTodo input-group'>
+				<input
+					placeholder='Add New To-do..'
+					type='text'
+					name='name'
+					maxLength='48'
+					value={newTodo.name}
+					onChange={(e) => setNewTodo({ ...newTodo, name: e.target.value })}
+					className='form-control'
+				/>
+				<div className='input-group-append'>
+					<button
+						type='submit'
+						className='btn btn-primary'
+						onClick={() => handleAddTodo()}
+					>
+						<i className='fas fa-plus'></i>
+					</button>
+				</div>
+			</div>
+			<div className='row w-100 ml-auto mb-3 mr-3 justify-content-between'>
+				<div className='col-4'>
+					<div className='input-group'>
 						<input
-							placeholder='Add New To-do'
+							placeholder='Filter..'
 							type='text'
+							name='name'
+							maxLength='48'
+							value={filter}
+							onChange={(e) => setFilter(e.target.value)}
 							className='form-control'
 						/>
 						<div className='input-group-append'>
-							<span className='btn btn-primary'>
-								<i className='fas fa-plus'></i>
-							</span>
-						</div>
-					</div>
-					<div className='todoList'>
-						<div className='list-group'>
-							{todos.map(todo => (
-								<TodoItem
-									key={todo.id}
-									name={todo.name}
-									isCompleted={todo.isCompleted}
-									onClick={() => toggleTodo(todo)}
-								/>
-							))}
+							<button
+								type='submit'
+								className='btn btn-secondary'
+								onClick={() => filterTodos(filter)}
+							>
+								<i className='fas fa-search'></i>
+							</button>
 						</div>
 					</div>
 				</div>
-				<div className='todoInfo col-lg-5 bg-dark'>{isTodoSelected()}</div>
+				<div className='col-4 p-0'>
+					<button
+						type='button'
+						className='btn btn-secondary'
+						onClick={() => handleClearFilter()}
+					>
+						Clear Filter
+					</button>
+				</div>
+				<div className='col-4'>
+					<div className='btn-group float-right'>
+						<button type='button' className='btn btn-secondary'>
+							Sort by
+						</button>
+						<button
+							type='button'
+							className='btn btn-secondary dropdown-toggle dropdown-toggle-split'
+							data-toggle='dropdown'
+							aria-haspopup='true'
+							aria-expanded='false'
+						>
+							<span className='sr-only'>Toggle Dropdown</span>
+						</button>
+						<div className='dropdown-menu dropdown-menu-right'>
+							<button
+								type='button'
+								className='dropdown-item'
+								onClick={() => handleSortAlphabetical()}
+							>
+								A-Z
+							</button>
+							<button
+								type='button'
+								className='dropdown-item'
+								onClick={() => handleSortPriority()}
+							>
+								Priority
+							</button>
+							<button
+								type='button'
+								className='dropdown-item'
+								onClick={() => handleSortDeadline()}
+							>
+								Deadline
+							</button>
+						</div>
+					</div>
+				</div>
 			</div>
-		</>
+			<div className='todoList'>
+				<ul className='list-group'>
+					{filtered !== null
+						? filtered.map((todo) => (
+								<TodoItem key={todo.id} todo={todo} setIsActive={setIsActive} />
+						  ))
+						: todos.map((todo) => (
+								<TodoItem key={todo.id} todo={todo} setIsActive={setIsActive} />
+						  ))}
+				</ul>
+			</div>
+		</div>
 	);
 };
 

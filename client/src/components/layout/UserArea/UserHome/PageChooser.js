@@ -1,7 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+// This is a landing page that the users arrive on when users first log in
 const PageChooser = () => {
+	// Component returns a grid of four cards containing a description of each page of th application and a link
 	return (
 		<div className='fluid-container' style={{ marginTop: '70px' }}>
 			<div className='row'>

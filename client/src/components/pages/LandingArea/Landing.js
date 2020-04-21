@@ -1,18 +1,12 @@
 import React, { Fragment } from 'react';
-import { Spotlight, Header } from '../../';
-import { makeStyles } from '@material-ui/core';
+import LandingArea from '../../layout/LandingArea/Landing/LandingArea';
+import '../../layout/LandingArea/Landing/Landing.css';
 
-const useStyles = makeStyles(theme => ({
-	offset: theme.mixins.toolbar
-}));
-
+// Renders the landing page
 const Landing = () => {
-	const classes = useStyles();
 	return (
 		<Fragment>
-			<Header />
-			<div className={classes.offset}></div>
-			<Spotlight />
+			<LandingArea />
 		</Fragment>
 	);
 };

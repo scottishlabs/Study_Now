@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavBar, CalendarArea } from '../../';
 
+// Renders the calendar page
 const Calendar = () => {
 	return (
 		<>

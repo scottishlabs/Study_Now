@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavBar, FlashcardArea } from '../../';
 
+// Renders the flashcard page
 const Flashcards = () => {
 	return (
 		<>

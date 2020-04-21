@@ -2,13 +2,31 @@
 	--border-color: #eee;
 }
 
+.react-datepicker-wrapper {
+	width: 100%;
+}
+
 .todoListArea {
-	height: 100vh;
+	height: 100%;
 	padding: 0;
 }
 
+.todoUnSelectable {
+	-webkit-user-select: none; /* Safari */
+	-moz-user-select: none; /* Firefox */
+	-ms-user-select: none; /* IE10+/Edge */
+	user-select: none; /* Standard */
+}
+
+input#deadline {
+	border-radius: 0.25rem;
+	border-width: 1px;
+	padding: 6px 12px;
+	background-color: #e9ecef;
+}
+
 .todoList {
-	height: calc(100% - 70px);
+	height: calc(100% - 70px - 70px);
 	overflow-y: scroll;
 	border: 5px solid var(--border-color);
 	border-radius: 3px;
@@ -19,38 +37,76 @@
 	width: 0px;
 }
 
-.todoInfo {
-	display: none;
-	position: sticky;
-	top: 0;
-}
 .addTodo {
 	padding: 1rem 1rem 1rem 8rem;
 	background-color: #f9f9f9;
 }
+
+.todoItemLabel {
+	word-break: break-word;
+	hyphens: auto;
+}
+
 .todoItem {
 	display: flex;
 	flex-direction: row;
 }
 
+.defaultIcon {
+	height: 100%;
+	font-size: 2rem;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+}
+
+.defaultIcon i {
+	display: block;
+	font-size: 10rem;
+	margin-bottom: 2.5rem;
+}
+
+.todoFormWrapper {
+	z-index: 99;
+	height: 100vh !important;
+	display: none;
+	position: absolute;
+	right: 0;
+	top: 0;
+}
+
+.todoFormWrapper.active {
+	width: 100%;
+	display: block;
+}
+
+.todoForm {
+	max-height: 100vh;
+	overflow-y: scroll;
+}
+
+.todoForm::-webkit-scrollbar {
+	width: 0px;
+}
+
+.closeSettingsBtn {
+	border-radius: 0 !important;
+	top: 0;
+	right: 0;
+	font-size: 2rem;
+}
+
 @media (min-width: 992px) {
-	.todoInfo {
-		height: 100vh;
-		display: block;
-		position: sticky;
-		top: 0;
-	}
-	.defaultIcon {
-		height: 100%;
-		font-size: 2rem;
-		align-items: center;
-		justify-content: center;
-		text-align: center;
+	.todoFormWrapper {
+		display: block !important;
+		position: relative !important;
+		width: 100% !important;
+		-webkit-box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, 0.75);
+		-moz-box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, 0.75);
+		box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, 0.75);
 	}
 
-	.defaultIcon i {
-		display: block;
-		font-size: 10rem;
-		margin-bottom: 2.5rem;
+	.closeSettingsBtn {
+		display: none;
 	}
 }

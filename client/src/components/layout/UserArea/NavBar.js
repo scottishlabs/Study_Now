@@ -3,17 +3,19 @@ import { Link } from 'react-router-dom';
 
 import './NavBar.css';
 
-const NavBar = props => {
+// Navbar that contains all of the pages in the application
+const NavBar = (props) => {
+	// State that contains whether the sidebar is enlarged or not
 	const [state, setState] = useState({
-		isActive: true
+		isActive: true,
 	});
 
+	// Changes the state of the sidebar
 	const handleClick = () => {
 		setState({ isActive: !state.isActive });
 	};
 
-	const closeOnClick = () => {};
-
+	// Components returns a side bar that contains links to all pages. can be enlarged or minimized. Top bar contains a logout button and a button to open and close sidebar
 	return (
 		<div className='wrapper'>
 			<nav
@@ -61,7 +63,7 @@ const NavBar = props => {
 				<div></div>
 			</nav>
 
-			<div className='content w-100' id='content'>
+			<div className='content w-100 h-100' id='content'>
 				<div className='topbar py-3 '>
 					<button
 						type='button'

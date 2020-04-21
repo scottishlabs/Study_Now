@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavBar, PomodoroTimerArea } from '../../';
 
+// Renders the pomodoro timer page
 const PomodoroTimer = () => {
 	return (
 		<>

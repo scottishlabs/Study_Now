@@ -1,11 +1,8 @@
-import React from 'react'
+import React from 'react';
 
+// Renders the sign in page
 const SignIn = () => {
-  return (
-    <div>
-      
-    </div>
-  )
-}
+	return <div></div>;
+};
 
-export default SignIn
+export default SignIn;

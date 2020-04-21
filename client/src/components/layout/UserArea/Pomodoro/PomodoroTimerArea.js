@@ -1,11 +1,13 @@
-import React from 'react'
+import React from 'react';
+import PomodoroTimer from './PomodoroTimer';
+import './PomodoroTimer.css';
 
 const PomodoroTimerArea = () => {
-  return (
-    <div>
-      
-    </div>
-  )
-}
+	return (
+		<div className='container-fluid wrapper row'>
+			<PomodoroTimer />
+		</div>
+	);
+};
 
-export default PomodoroTimerArea
+export default PomodoroTimerArea;

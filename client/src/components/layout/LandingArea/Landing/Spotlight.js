@@ -1,67 +1,43 @@
 import React from 'react';
-import { Grid, Paper, makeStyles, Typography, Button } from '@material-ui/core';
+import { Link } from 'react-router-dom';
+import spotlightCalendar from '../../../../assets/images/LandingArea/Landing/spotlightCalendar.png';
+import spotlightBackground from '../../../../assets/images/LandingArea/Landing/spotlightBackground.png';
 
-const useStyles = makeStyles(theme => ({
-	root: {
-		padding: 10,
-		flexGrow: 1
-	},
-	paper: {
-		padding: theme.spacing(2)
-	},
-	image: {
-		maxWidth: '100%',
-		height: 'auto'
-	},
-	text: {
-		display: 'inline-block'
-	}
-}));
-
-const Spotlight = () => {
-	const classes = useStyles();
-
+const Spotlight = ({ scrollToRef, scrollRef }) => {
 	return (
-		<div className={classes.root}>
-			<Grid container justify='center' spacing={3}>
-				<Grid item xs={5} justify='flex-end'>
-					<img
-						className={classes.image}
-						src='https://via.placeholder.com/750'
-						alt=''
-					/>
-				</Grid>
-				<Grid item xs={3} justify='flex-start'>
-					<Paper className={classes.paper}>
-						<Grid container>
-							<Grid item>
-								<Typography variant='h1' align='left'>
-									Welcome
-								</Typography>
-								<Typography variant='body1' align='left'>
-									Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-									Aliquam corporis facilis laboriosam, ex ad provident itaque
-									architecto sit incidunt nam id aspernatur numquam saepe
-									molestiae iure maiores, natus exercitationem iusto.
-								</Typography>
-								<Grid container spacing={1}>
-									<Grid item xs={12} />
-									<Grid item>
-										<Button variant='contained' color='primary'>
-											Sign Up
-										</Button>
-									</Grid>
-									<Grid item>
-										<Button variant='outlined' color='default'>
-											Learn More
-										</Button>
-									</Grid>
-								</Grid>
-							</Grid>
-						</Grid>
-					</Paper>
-				</Grid>
-			</Grid>
+		<div className='row'>
+			<div className='spotlightJumbo col-12 col-lg-7 bg-transparent text-white text-left'>
+				<h1
+					className='display-3 my-4'
+					style={{ fontSize: '4vmax', fontWeight: '350' }}
+				>
+					<strong>Study Smarter Not Harder</strong>
+				</h1>
+				<p className='lead my-4'>
+					Lorem ipsum dolor, sit amet consectetur adipisicing elit. Sequi
+					accusantium ratione doloribus non obcaecati? Tempora molestias iste
+					blanditiis facere obcaecati.
+				</p>
+				<div className='d-flex flex-row w-100 justify-content-left my-5'>
+					<Link className='btn btn-light shadow-lg mr-2' to='/signup'>
+						Sign up
+					</Link>
+					<button
+						className='btn btn-outline-light'
+						onClick={() => scrollToRef(scrollRef)}
+					>
+						Learn more
+					</button>
+				</div>
+				<img src={spotlightBackground} alt='' className='spotlightBackground' />
+			</div>
+			<div className='spotlightImageWrapper col-12 col-lg-5'>
+				<img
+					className='spotlightImage shadow-lg'
+					src={spotlightCalendar}
+					alt=''
+				/>
+			</div>
 		</div>
 	);
 };

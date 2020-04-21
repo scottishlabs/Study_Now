@@ -1,6 +1,3 @@
-import Header from './layout/LandingArea/NavBar';
-import Features from './layout/LandingArea/Landing/Features';
-import Spotlight from './layout/LandingArea/Landing/Spotlight';
 import PageChooser from './layout/UserArea/UserHome/PageChooser';
 import NavBar from './layout/UserArea/NavBar';
 import Events from './layout/UserArea/Calendar/Events';
@@ -19,9 +16,6 @@ import PomodoroTimerArea from './layout/UserArea/Pomodoro/PomodoroTimerArea';
 import FlashcardArea from './layout/UserArea/Flashcards/FlashcardArea';
 
 export {
-	Header,
-	Features,
-	Spotlight,
 	PageChooser,
 	NavBar,
 	Events,
@@ -37,5 +31,5 @@ export {
 	CalendarArea,
 	TodoArea,
 	PomodoroTimerArea,
-	FlashcardArea
+	FlashcardArea,
 };
