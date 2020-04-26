@@ -22,7 +22,7 @@ const Spotlight = ({ scrollToRef, scrollRef }) => {
 						</h1>
 						<p
 							className='display-5 my-4 text-dark'
-							style={{ fontSize: '2vmax' }}
+							style={{ fontSize: '3vmin' }}
 						>
 							Study Now is the perfect companion for any student from GCSE to
 							PhD students you can stay organized and get more done!
@@ -43,7 +43,7 @@ const Spotlight = ({ scrollToRef, scrollRef }) => {
 						</div>
 					</div>
 					<div className='' style={{ flex: '0.25 1 0' }}></div>
-					<div className='container-fluid ' style={{ flex: '1 1 0' }}>
+					<div className='container-fluid m-auto' style={{ flex: '1 1 0' }}>
 						<img
 							src={spotlightExample}
 							alt=''

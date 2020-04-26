@@ -1,5 +1,6 @@
 import React from 'react';
-import { NavBar, CalendarArea } from '../../';
+import NavBar from '../../layout/UserArea/NavBar';
+import CalendarArea from '../../layout/UserArea/Calendar/CalendarArea';
 
 // Renders the calendar page
 const Calendar = () => {

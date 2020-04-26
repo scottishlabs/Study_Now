@@ -9,7 +9,7 @@ const Benefits = ({ myRef }) => {
 				{/*  */}
 				<div className='card bg-transparent border-0 benefitCard'>
 					<div className='container d-flex flex-column-reverse flex-lg-row text-center text-lg-left'>
-						<div className='px-4 mx-4'>
+						<div className='container-fluid m-auto'>
 							<img
 								src={benefits1}
 								alt=''
@@ -17,7 +17,7 @@ const Benefits = ({ myRef }) => {
 								className='benefit1 shadow'
 							/>
 						</div>
-						<div className='mb-4 pt-3 mx-5'>
+						<div className='container-fluid m-auto'>
 							<div className='text-center'>
 								<i className='far fa-calendar-check card-img-top text-light text-center mb-2 circleIcon shadow' />
 							</div>
@@ -37,8 +37,8 @@ const Benefits = ({ myRef }) => {
 				</div>
 
 				<div className='card bg-transparent border-0 benefitCard'>
-					<div className='container d-flex flex-column flex-lg-row text-center text-lg-right'>
-						<div className='mb-4 pt-3 mx-5'>
+					<div className='container d-flex flex-column flex-lg-row text-center text-lg-left'>
+						<div className='container-fluid m-auto'>
 							<div className='text-center'>
 								<i className='fas fa-pencil-alt card-img-top text-light text-center mb-2 circleIcon shadow' />
 							</div>
@@ -62,7 +62,7 @@ const Benefits = ({ myRef }) => {
 								</a>
 							</div>
 						</div>
-						<div className='px-4 mx-4'>
+						<div className='container-fluid m-auto text-right'>
 							<img
 								src='https://via.placeholder.com/304x400.png'
 								alt=''
@@ -74,7 +74,7 @@ const Benefits = ({ myRef }) => {
 
 				<div className='card benefitCard border-0 bg-transparent '>
 					<div className='container d-flex flex-column text-center text-lg-left'>
-						<div className='mb-4 pt-3 mx-auto w-75'>
+						<div className='container-fluid m-auto w-75'>
 							<div className='text-center'>
 								<i className='fas fa-bus card-img-top center text-light mb-2 circleIcon shadow' />
 							</div>
@@ -100,7 +100,7 @@ const Benefits = ({ myRef }) => {
 
 				<div className='card benefitCard border-0 bg-transparent'>
 					<div className='container d-flex flex-column text-center text-lg-left'>
-						<div className='my-3 mt-4 mx-5'>
+						<div className='container-fluid m-auto'>
 							<div className='card-body '>
 								<h2 className='card-title text-dark text-center'>
 									Available on:

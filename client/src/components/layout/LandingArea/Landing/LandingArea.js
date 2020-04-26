@@ -4,7 +4,7 @@ import NavBar from './NavBar';
 import Benefits from './Benefits';
 import Footer from './Footer';
 
-const scrollToRef = (ref) => window.scrollTo(0, ref.current.offsetTop - 72);
+const scrollToRef = (ref) => window.scrollTo(0, ref.current.offsetTop - 56);
 
 const LandingArea = () => {
 	const myRef = useRef(null);

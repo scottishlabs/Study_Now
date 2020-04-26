@@ -2,16 +2,15 @@ import React, { Fragment } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import TodoState from './context/todo/TodoState';
 import PomodoroState from './context/pomodoroTimer/PomodoroState';
-import {
-	Landing,
-	Calendar,
-	SignIn,
-	SignUp,
-	Flashcards,
-	PomodoroTimer,
-	UserHome,
-	Todos,
-} from './components';
+import Landing from './components/pages/LandingArea/Landing';
+import Calendar from './components/pages/UserArea/Calendar';
+import SignIn from './components/pages/LandingArea/SignIn';
+import SignUp from './components/pages/LandingArea/SignUp';
+import Flashcards from './components/pages/UserArea/Flashcards';
+import PomodoroTimer from './components/pages/UserArea/PomodoroTimer';
+import UserHome from './components/pages/UserArea/UserHome';
+import Todos from './components/pages/UserArea/Todos';
+import PageNotFound from './components/pages/PageNotFound';
 
 const App = () => {
 	//Single page application switcher for each page in the application
@@ -21,9 +20,15 @@ const App = () => {
 				<Router>
 					<Fragment>
 						<Switch>
-							<Route exact path='/' component={Landing} />
-							<Route exact path='/Signin' component={SignIn} />
-							<Route exact path='/Signup' component={SignUp} />
+							<Route exact path='/'>
+								<Landing />
+							</Route>
+							<Route exact path='/Signin'>
+								<SignIn />
+							</Route>
+							<Route exact path='/Signup'>
+								<SignUp />
+							</Route>
 							<Route exact path='/Calendar'>
 								<Calendar />
 							</Route>
@@ -38,6 +43,9 @@ const App = () => {
 							</Route>
 							<Route exact path='/UserHome'>
 								<UserHome />
+							</Route>
+							<Route>
+								<PageNotFound />
 							</Route>
 						</Switch>
 					</Fragment>

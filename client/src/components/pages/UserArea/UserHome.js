@@ -1,5 +1,6 @@
 import React from 'react';
-import { NavBar, PageChooser } from '../../';
+import NavBar from '../../layout/UserArea/NavBar';
+import PageChooser from '../../layout/UserArea/UserHome/PageChooser';
 
 // Renders the user home page
 const UserHome = () => {

@@ -1,0 +1,9 @@
+.vl {
+	border-right: 0;
+}
+
+@media (min-width: 768px) {
+	.vl {
+		border-right: solid lightgrey;
+	}
+}

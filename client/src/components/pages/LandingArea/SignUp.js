@@ -1,8 +1,13 @@
 import React from 'react';
+import SignUpArea from '../../layout/LandingArea/SignUp/SignUpArea';
 
 // Renders the sign up page
 const SignUp = () => {
-	return <div></div>;
+	return (
+		<>
+			<SignUpArea />
+		</>
+	);
 };
 
 export default SignUp;
