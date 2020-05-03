@@ -6,10 +6,13 @@ const auth = require('../middleware/auth');
 const Todo = require('../models/Todo');
 const User = require('../models/User');
 
+// @route    GET api/todos
+// @desc     Get all users todos
+// @access   Private
 router.get('/', auth, async (req, res) => {
 	try {
 		const todos = await Todo.find({ user: req.user.id }).sort({
-			date: -1
+			date: -1,
 		});
 		res.json(todos);
 	} catch (err) {
@@ -18,16 +21,12 @@ router.get('/', auth, async (req, res) => {
 	}
 });
 
+// @route    POST api/todos
+// @desc     Add new todo
+// @access   Private
 router.post(
 	'/',
-	[
-		auth,
-		[
-			check('title', 'Title is required!')
-				.not()
-				.isEmpty()
-		]
-	],
+	[auth, [check('title', 'Title is required!').not().isEmpty()]],
 	async (req, res) => {
 		const errors = validationResult(req);
 		if (!errors.isEmpty()) {
@@ -42,7 +41,7 @@ router.post(
 			priority,
 			tags,
 			subTodos,
-			completed
+			completed,
 		} = req.body;
 		try {
 			const newTodo = new Todo({
@@ -54,7 +53,7 @@ router.post(
 				tags,
 				subTodos,
 				completed,
-				user: req.user.id
+				user: req.user.id,
 			});
 
 			const todo = await newTodo.save();
@@ -67,6 +66,9 @@ router.post(
 	}
 );
 
+// @route    PUT api/todos/:id
+// @desc     Update todo
+// @access   Private
 router.put('/:id', auth, async (req, res) => {
 	const {
 		title,
@@ -76,7 +78,7 @@ router.put('/:id', auth, async (req, res) => {
 		priority,
 		tags,
 		subTodos,
-		completed
+		completed,
 	} = req.body;
 
 	const todoFields = {};
@@ -112,6 +114,9 @@ router.put('/:id', auth, async (req, res) => {
 	}
 });
 
+// @route    DELETE api/todos/:id
+// @desc     Delete todo
+// @access   Private
 router.delete('/:id', auth, async (req, res) => {
 	try {
 		let todo = await Todo.findById(req.params.id);

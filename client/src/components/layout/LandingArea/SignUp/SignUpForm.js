@@ -64,7 +64,7 @@ const SignUpForm = () => {
 				/>
 			</div>
 			<button type='submit' className='btn btn-primary btn-block'>
-				Sign in
+				Sign up
 			</button>
 		</form>
 	);

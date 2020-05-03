@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
 import moment from 'moment';
 import './CalendarArea.css';
+import AddEditArea from './AddEditArea';
+import Events from './Events';
 
 const CalendarArea = () => {
 	const [currentMonth, setCurrentMonth] = useState(new Date());
 	const [selectedDate, setSelectedDate] = useState(new Date());
+	const [isAdd, setIsAdd] = useState(false);
+	const [isActive, setIsActive] = useState(false);
 
 	const drawHeader = () => {
 		return (
@@ -18,11 +22,7 @@ const CalendarArea = () => {
 					/>
 				</div>
 				<div className='col col-center'>
-					<span>
-						{moment(currentMonth)
-							.format('MMMM YYYY')
-							.toString()}
-					</span>
+					<span>{moment(currentMonth).format('MMMM YYYY').toString()}</span>
 				</div>
 				<div
 					className='col col-end'
@@ -54,9 +54,7 @@ const CalendarArea = () => {
 	};
 
 	const drawCells = () => {
-		const monthStart = moment(currentMonth)
-			.startOf('month')
-			.toDate();
+		const monthStart = moment(currentMonth).startOf('month').toDate();
 		const startDate = moment(currentMonth)
 			.startOf('month')
 			.startOf('isoWeek')
@@ -70,8 +68,6 @@ const CalendarArea = () => {
 
 		let days = [];
 		let day = startDate;
-
-		// ${isEvent(day) ? 'blue bold' : ''}
 
 		while (day <= endDate) {
 			for (let i = 0; i < 7; i++) {
@@ -89,12 +85,14 @@ const CalendarArea = () => {
 						key={day}
 						onClick={() => onDateClick(cloneDay)}
 					>
-						<span className='number'>{moment(day).format('D')}</span>
+						<span className='number mb-1'>{moment(day).format('D')}</span>
+						<Events
+							isDisabled={!moment(day).isSame(monthStart, 'month')}
+							date={day}
+						/>
 					</div>
 				);
-				day = moment(day)
-					.add(1, 'd')
-					.toDate();
+				day = moment(day).add(1, 'd').toDate();
 			}
 
 			rows.push(
@@ -108,33 +106,49 @@ const CalendarArea = () => {
 		return <div className='body'>{rows}</div>;
 	};
 
-	const onDateClick = day => {
+	const onDateClick = (day) => {
 		setSelectedDate(day);
+		setIsActive(true);
 	};
 
 	const nextMonth = () => {
-		setCurrentMonth(
-			moment(currentMonth)
-				.add(1, 'M')
-				.toDate()
-		);
+		setCurrentMonth(moment(currentMonth).add(1, 'M').toDate());
 	};
 
 	const prevMonth = () => {
-		setCurrentMonth(
-			moment(currentMonth)
-				.subtract(1, 'M')
-				.toDate()
-		);
+		setCurrentMonth(moment(currentMonth).subtract(1, 'M').toDate());
+	};
+
+	const onAddEvent = () => {
+		setIsAdd(true);
+		setIsActive(true);
 	};
 
 	return (
-		<div className='calendar'>
-			{drawHeader()}
-			{drawDays()}
-			{drawCells()}
+		<div className=''>
+			<div className='containerWrap'>
+				<div className='topBar w-100 py-3 px-3' style={{ height: '70px' }}>
+					<div className='btn btn-primary float-right' onClick={onAddEvent}>
+						New Event
+						<i className='ml-2 fas fa-edit'></i>
+					</div>
+				</div>
+				<div className='calendar'>
+					{drawHeader()}
+					{drawDays()}
+					{drawCells()}
+				</div>
+				<div className='p-0'>
+					<AddEditArea
+						isAdd={isAdd}
+						setIsAdd={setIsAdd}
+						setIsActive={setIsActive}
+            isActive={isActive}
+            selectedDate={selectedDate}
+					/>
+				</div>
+			</div>
 		</div>
 	);
 };
-
 export default CalendarArea;

@@ -28,7 +28,7 @@ const TodoState = (props) => {
 				isCompleted: false,
 				urgent: true,
 				important: true,
-				deadline: new Date(1995, 11, 17),
+				deadline: new Date(2020, 4, 3),
 			},
 			{
 				id: 2,
@@ -37,7 +37,7 @@ const TodoState = (props) => {
 				isCompleted: false,
 				urgent: true,
 				important: false,
-				deadline: '',
+				deadline: new Date(),
 			},
 			{
 				id: 3,

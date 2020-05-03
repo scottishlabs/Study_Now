@@ -1,0 +1,108 @@
+:root {
+	--border-color: #eee;
+}
+
+.containerWrap {
+	position: relative;
+}
+
+.searchFilter {
+	padding: 1rem 0rem 1rem 114px !important;
+}
+
+.browseWrapper {
+	position: relative;
+	width: 100%;
+	height: 100vh;
+}
+
+.browseFlashArea {
+	height: calc(100vh - 140px);
+	overflow-y: scroll;
+	background-color: var(--border-color);
+	padding: 0 1rem;
+}
+
+.browseFlashArea::-webkit-scrollbar {
+	width: 0px;
+}
+
+.flashcardTitle {
+	line-height: 30px;
+}
+
+.optionBtns {
+	position: absolute;
+	padding: 1rem 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+}
+
+.addEditWrapper {
+	z-index: 99;
+	position: fixed;
+	top: 0;
+	height: 100vh;
+	overflow-y: scroll;
+	display: none;
+	-webkit-box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, 0.75);
+	-moz-box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, 0.75);
+	box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, 0.75);
+}
+
+.addEditWrapper.active {
+	width: 100%;
+	display: block;
+}
+
+.addEditWrapper::-webkit-scrollbar {
+	width: 0px;
+}
+
+.flashcardUnselectable {
+	-webkit-user-select: none; /* Safari */
+	-moz-user-select: none; /* Firefox */
+	-ms-user-select: none; /* IE10+/Edge */
+	user-select: none; /* Standard */
+}
+
+.defaultIcon {
+	height: 100%;
+	font-size: 2rem;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+}
+
+.defaultIcon i {
+	display: block;
+	font-size: 10rem;
+	margin-bottom: 2.5rem;
+}
+
+.studyContainer {
+	z-index: 20;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: 100vh;
+	width: 100%;
+}
+
+.flashcardContainer {
+	width: 90%;
+	height: 60vh;
+	border: 2px solid white;
+	overflow-y: scroll;
+}
+
+@media (min-width: 992px) {
+	.addEditWrapper {
+		z-index: 0;
+		display: block !important;
+		position: relative;
+		width: 100%;
+	}
+}

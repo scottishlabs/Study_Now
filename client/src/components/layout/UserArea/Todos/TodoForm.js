@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect, Fragment } from 'react';
 import TodoContext from '../../../../context/todo/todoContext';
-import DatePicker from 'react-datepicker';
+import DateTimePicker from 'react-datetime-picker';
 import moment from 'moment';
 import SubTodoItem from './SubTodoItem';
 import './Todos.css';
@@ -32,7 +32,7 @@ const TodoForm = ({ isActive, setIsActive }) => {
 				isCompleted: false,
 				urgent: false,
 				important: false,
-				deadline: null,
+				deadline: new Date(),
 			});
 			setIsActive(false);
 		}
@@ -55,7 +55,7 @@ const TodoForm = ({ isActive, setIsActive }) => {
 		isCompleted: false,
 		urgent: false,
 		important: false,
-		deadline: null,
+		deadline: new Date(),
 	});
 
 	// Updates currently selected todo with the inputs in the form and pushes it to context
@@ -236,12 +236,14 @@ const TodoForm = ({ isActive, setIsActive }) => {
 						<label className='text-white col-12  p-0' htmlFor='deadline'>
 							Deadline:
 						</label>
-						<DatePicker
-							className='datePickerForm col-12'
+						<DateTimePicker
+							className='form-control col-12'
 							id='deadline'
-							selected={deadline}
+							minDate={new Date()}
+							value={deadline}
 							onChange={(e) => onChangeDate(e)}
-							readOnly={!isEditing}
+							disabled={!isEditing}
+							clearIcon={null}
 						/>
 					</div>
 					<div className='custom-control custom-checkbox mt-4'>
@@ -251,7 +253,7 @@ const TodoForm = ({ isActive, setIsActive }) => {
 							className='custom-control-input'
 							checked={urgent}
 							onChange={onChange}
-							readOnly={!isEditing}
+							disabled={!isEditing}
 						/>
 						<label className='custom-control-label text-white' htmlFor='urgent'>
 							Urgent
@@ -264,7 +266,7 @@ const TodoForm = ({ isActive, setIsActive }) => {
 							className='custom-control-input'
 							checked={important}
 							onChange={onChange}
-							readOnly={!isEditing}
+							disabled={!isEditing}
 						/>
 						<label
 							className='custom-control-label text-white'

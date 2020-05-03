@@ -1,58 +1,37 @@
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
 
-const SubTodoSchema = new Schema({
-	title: {
-		type: String,
-		required: true
-	},
-	datePosted: {
-		type: Date
-	},
-	dateEnd: {
-		type: Date
-	},
-	completed: {
-		type: Boolean
-	}
-});
-
-const TodoSchema = new Schema({
+const TodoSchema = mongoose.Schema({
 	user: {
 		type: mongoose.Schema.Types.ObjectId,
-		ref: 'users'
+		ref: 'users',
 	},
-	title: {
+	name: {
 		type: String,
-		required: true
+		required: true,
 	},
-	desc: {
+	description: {
 		type: String,
-		default: ''
+		default: '',
 	},
-	datePosted: {
-		type: Date,
-		default: Date.now
-	},
-	dateEnd: {
-		type: Date,
-		default: Date.now
-	},
-	priority: {
-		type: Number,
-		default: 0
-	},
-	tags: {
-		type: [String]
-	},
-	subTodos: {
-		type: [SubTodoSchema],
-		default: []
-	},
-	completed: {
+	isCompleted: {
 		type: Boolean,
-		default: false
-	}
+		default: false,
+		required: true,
+	},
+	urgent: {
+		type: Boolean,
+		default: false,
+		required: true,
+	},
+	important: {
+		type: Boolean,
+		default: false,
+		required: true,
+	},
+	deadline: {
+		type: Date,
+		default: Date.now,
+	},
 });
 
 module.exports = mongoose.model('todo', TodoSchema);

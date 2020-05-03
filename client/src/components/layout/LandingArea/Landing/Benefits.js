@@ -1,5 +1,6 @@
 import React from 'react';
 import benefits1 from '../../../../assets/images/LandingArea/Landing/benefits1.jpg';
+import benefits2 from '../../../../assets/images/LandingArea/Landing/benefits2.jpg';
 import benefits3 from '../../../../assets/images/LandingArea/Landing/benefits3.png';
 
 const Benefits = ({ myRef }) => {
@@ -62,12 +63,8 @@ const Benefits = ({ myRef }) => {
 								</a>
 							</div>
 						</div>
-						<div className='container-fluid m-auto text-right'>
-							<img
-								src='https://via.placeholder.com/304x400.png'
-								alt=''
-								className='benefit1 shadow'
-							/>
+						<div className='container-fluid m-auto text-lg-right'>
+							<img src={benefits2} alt='' className='benefit1 shadow' />
 						</div>
 					</div>
 				</div>

@@ -18,6 +18,7 @@ const PomodoroState = (props) => {
 	const [state, dispatch] = useReducer(pomodoroReducer, initialState);
 
 	//Get Pomodoro Settings
+	const getPomodoroSettings = () => {};
 
 	//Update Pomodoro Settings and dispatches to reducer
 	const updatePomodoroTime = (settings) => {

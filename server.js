@@ -7,7 +7,7 @@ connectDatabase();
 
 app.use(
 	express.json({
-		extended: false
+		extended: false,
 	})
 );
 
@@ -18,6 +18,9 @@ app.get('/', (req, res) => {
 app.use('/api/users', require('./routes/users'));
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/todos', require('./routes/todos'));
+app.use('/api/events', require('./routes/events'));
+app.use('/api/flashcards', require('./routes/flashcards'));
+app.use('/api/subTodos', require('./routes/subTodos'));
 
 const port = process.env.PORT || 5000;
 
