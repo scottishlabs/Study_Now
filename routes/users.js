@@ -17,10 +17,8 @@ router.post(
 		check('email', 'Please include a valid email!').isEmail(),
 		check(
 			'password',
-			'Please enter a password with 6 or more characters!'
-		).isLength({
-			min: 6,
-		}),
+			'Please enter a password with at least 8 characters including a combination of one uppercase, one lowercase, one digit and one special character'
+		).matches(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/, 'i'),
 	],
 	async (req, res) => {
 		const errors = validationResult(req);
@@ -34,6 +32,7 @@ router.post(
 
 		try {
 			let user = await User.findOne({ email });
+
 			if (user) {
 				return res.status(400).json({
 					msg: 'FAILURE! ... User already exists',

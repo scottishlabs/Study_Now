@@ -49,13 +49,14 @@ router.post(
 				});
 			}
 
-			const match = await bcrypt.compare(password, user.password);
+			const isMatch = await bcrypt.compare(password, user.password);
 
-			if (!match) {
+			if (!isMatch) {
 				return res.status(400).json({
 					msg: 'FAILURE! ... Invalid Credentials',
 				});
-			}
+      }
+      
 			const payload = {
 				user: {
 					id: user.id,
