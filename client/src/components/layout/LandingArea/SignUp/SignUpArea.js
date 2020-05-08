@@ -2,7 +2,7 @@ import React from 'react';
 import SignUpForm from './SignUpForm';
 import './SignUp.css';
 
-const SignUpArea = () => {
+const SignUpArea = (props) => {
 	return (
 		<div
 			className='container w-100'
@@ -15,7 +15,7 @@ const SignUpArea = () => {
 				<div className='row h-100'>
 					<div className='col-12 col-md-7 order-2 order-md-1 vl'></div>
 					<div className='col-12 col-md-5 order-1 order-md-2'>
-						<SignUpForm />
+						<SignUpForm {...props} />
 					</div>
 				</div>
 			</div>

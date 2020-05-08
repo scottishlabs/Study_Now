@@ -15,13 +15,11 @@ router.post(
 	[
 		check('name', 'Please add name!').not().isEmpty(),
 		check('email', 'Please include a valid email!').isEmail(),
-		check(
-			'password',
-			'Please enter a password with at least 8 characters including a combination of one uppercase, one lowercase, one digit and one special character'
-		).matches(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/, 'i'),
+		check('password', '6').isLength({ min: 6 }),
 	],
 	async (req, res) => {
 		const errors = validationResult(req);
+		console.log(errors);
 		if (!errors.isEmpty()) {
 			return res.status(400).json({
 				errors: errors.array(),
@@ -35,7 +33,7 @@ router.post(
 
 			if (user) {
 				return res.status(400).json({
-					msg: 'FAILURE! ... User already exists',
+					msg: 'User already exists',
 				});
 			}
 

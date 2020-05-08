@@ -1,5 +1,6 @@
 const express = require('express');
 const connectDatabase = require('./config/database');
+const path = require('path');
 
 const app = express();
 
@@ -10,10 +11,6 @@ app.use(
 		extended: false,
 	})
 );
-
-app.get('/', (req, res) => {
-	res.json({ msg: 'Welcome to the Study Now Prototype' });
-});
 
 app.use('/api/users', require('./routes/users'));
 app.use('/api/auth', require('./routes/auth'));

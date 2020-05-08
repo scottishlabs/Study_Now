@@ -1,18 +1,54 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
+import AuthContext from '../../../../context/auth/authContext';
+import AlertContext from '../../../../context/alert/alertContext';
+import { useHistory } from 'react-router-dom';
+import Alerts from '../../Alerts';
 
-const SignInForm = () => {
+const SignInForm = (props) => {
+	const alertContext = useContext(AlertContext);
+	const authContext = useContext(AuthContext);
+
+	const { setAlert } = alertContext;
+	const { login, error, clearErrors, isAuthenticated } = authContext;
+
+	let history = useHistory();
+
+	useEffect(() => {
+		if (isAuthenticated) {
+			history.push('/Userhome');
+		}
+
+		if (error === 'Invalid Credentials') {
+			setAlert(error, 'danger');
+			clearErrors();
+		}
+		// eslint-disable-next-line
+	}, [error, isAuthenticated, history]);
+
 	const [form, setForm] = useState({
 		email: '',
 		password: '',
-		isRemember: false,
+		// isRemember: false,
 	});
 
-	const formChange = (e) => {
-		setForm({ ...form, [e.target.id]: e.target.value });
+	const { email, password } = form;
+
+	const onChange = (e) => setForm({ ...form, [e.target.id]: e.target.value });
+
+	const onSubmit = (e) => {
+		e.preventDefault();
+		if (email === '' || password === '') {
+			setAlert('Please fill in all fields', 'danger');
+		} else {
+			login({
+				email,
+				password,
+			});
+		}
 	};
 
 	return (
-		<form className='text-left'>
+		<form className='text-left' onSubmit={onSubmit}>
 			<h1>Sign In</h1>
 			<div className='form-group'>
 				<label htmlFor='email'>Email address</label>
@@ -20,10 +56,10 @@ const SignInForm = () => {
 					type='email'
 					id='email'
 					className='form-control'
-					aria-describedBy='emailHelp'
+					aria-describedby='emailHelp'
 					placeholder='Email'
 					value={form.email}
-					onChange={formChange}
+					onChange={onChange}
 				/>
 				<small id='emailHelp' className='form-text text-muted'>
 					We'll never share your email with anyone else.
@@ -37,10 +73,10 @@ const SignInForm = () => {
 					className='form-control'
 					placeholder='Password'
 					value={form.password}
-					onChange={formChange}
+					onChange={onChange}
 				/>
 			</div>
-			<div className='form-group form-check'>
+			{/* 			<div className='form-group form-check'>
 				<label className='form-check-label'>
 					<input
 						type='checkbox'
@@ -51,10 +87,13 @@ const SignInForm = () => {
 					/>
 					Remember me
 				</label>
-			</div>
-			<button type='submit' className='btn btn-primary btn-block'>
-				Sign in
-			</button>
+			</div> */}
+			<input
+				type='submit'
+				className='btn btn-primary btn-block'
+				value='Sign in'
+			/>
+			<Alerts />
 		</form>
 	);
 };

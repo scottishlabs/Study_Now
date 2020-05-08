@@ -2,7 +2,7 @@
 	border-right: 0;
 }
 
-@media (min-width: 768px) {
+@media (max-width: 992px) {
 	.vl {
 		border-right: solid lightgrey;
 	}

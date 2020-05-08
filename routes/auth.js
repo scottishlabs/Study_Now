@@ -32,6 +32,7 @@ router.post(
 	],
 	async (req, res) => {
 		const errors = validationResult(req);
+		console.log(errors);
 		if (!errors.isEmpty()) {
 			return res.status(400).json({
 				errors: errors.array(),
@@ -45,7 +46,7 @@ router.post(
 
 			if (!user) {
 				return res.status(400).json({
-					msg: 'FAILURE! ... Invalid Credentials',
+					msg: 'Invalid Credentials',
 				});
 			}
 
@@ -53,10 +54,10 @@ router.post(
 
 			if (!isMatch) {
 				return res.status(400).json({
-					msg: 'FAILURE! ... Invalid Credentials',
+					msg: 'Invalid Credentials',
 				});
-      }
-      
+			}
+
 			const payload = {
 				user: {
 					id: user.id,

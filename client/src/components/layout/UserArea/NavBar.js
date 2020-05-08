@@ -1,10 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
+import Alerts from '../Alerts';
+import AuthContext from '../../../context/auth/authContext';
 
 import './NavBar.css';
 
 // Navbar that contains all of the pages in the application
 const NavBar = (props) => {
+	const authContext = useContext(AuthContext);
+
+	const { logout, loadUser } = authContext;
+
+	useEffect(() => {
+		loadUser();
+		// eslint-disable-next-line
+	}, []);
+
 	// State that contains whether the sidebar is enlarged or not
 	const [state, setState] = useState({
 		isActive: true,
@@ -13,6 +24,10 @@ const NavBar = (props) => {
 	// Changes the state of the sidebar
 	const handleClick = () => {
 		setState({ isActive: !state.isActive });
+	};
+
+	const onLogout = () => {
+		logout();
 	};
 
 	// Components returns a side bar that contains links to all pages. can be enlarged or minimized. Top bar contains a logout button and a button to open and close sidebar
@@ -74,11 +89,15 @@ const NavBar = (props) => {
 						<i className='fas fa-align-left'></i>
 					</button>
 					<Link to='/'>
-						<button className='btn btn-danger mr-3 float-right'>
+						<button
+							className='btn btn-danger mr-3 float-right'
+							onClick={onLogout}
+						>
 							<i className='fas fa-sign-out-alt'></i>
 						</button>
 					</Link>
 				</div>
+				<Alerts />
 				<props.content />
 			</div>
 		</div>

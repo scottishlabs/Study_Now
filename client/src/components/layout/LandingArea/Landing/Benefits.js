@@ -103,14 +103,14 @@ const Benefits = ({ myRef }) => {
 									Available on:
 								</h2>
 								<div className='d-flex flex-row w-75 mx-auto justify-content-around my-5'>
-									<i class='fab fa-microsoft'></i>
-									<i class='fab fa-apple'></i>
-									<i class='fab fa-linux'></i>
-									<i class='fab fa-android'></i>
-									<i class='fas fa-mobile'></i>
-									<i class='fas fa-tablet'></i>
-									<i class='fas fa-laptop'></i>
-									<i class='fas fa-desktop'></i>
+									<i className='fab fa-microsoft'></i>
+									<i className='fab fa-apple'></i>
+									<i className='fab fa-linux'></i>
+									<i className='fab fa-android'></i>
+									<i className='fas fa-mobile'></i>
+									<i className='fas fa-tablet'></i>
+									<i className='fas fa-laptop'></i>
+									<i className='fas fa-desktop'></i>
 								</div>
 								<h5 className='card-subtitle text-center'>
 									Any platform with a browser!

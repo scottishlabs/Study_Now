@@ -1,86 +1,120 @@
-import React, { useReducer } from 'react';
+import React, { useReducer, useContext } from 'react';
+import axios from 'axios';
 import AuthContext from './authContext';
 import authReducer from './authReducer';
-
+import setAuthToken from '../../utils/setAuthToken';
 import {
-	GET_EVENTS,
-	ADD_EVENT,
-	UPDATE_EVENT,
-	DELETE_EVENT,
-	SET_CURRENT_EVENT,
-	CLEAR_CURRENT_EVENT,
+	REGISTER_SUCCESS,
+	REGISTER_FAIL,
+	USER_LOADED,
+	AUTH_ERROR,
+	LOGIN_SUCCESS,
+	LOGIN_FAIL,
+	LOGOUT,
+	CLEAR_ERRORS,
 } from '../types';
 
-const EventState = (props) => {
+const AuthState = (props) => {
 	const initialState = {
-		events: [
-			{
-				id: 1,
-				start: new Date(2020, 4, 27, 12, 0),
-				end: new Date(2020, 4, 27, 18, 30),
-				title: 'event 1',
-				description: 'this is event 1',
-			},
-			{
-				id: 2,
-				start: new Date(2020, 4, 27, 11, 0),
-				end: new Date(2020, 4, 27, 16, 0),
-				title: 'event 2',
-				description: 'this is event 2',
-			},
-			{
-				id: 3,
-				start: new Date(2020, 4, 27, 12, 0),
-				end: new Date(2020, 4, 28, 18, 0),
-				title: 'event 3',
-				description: 'this is event 3',
-			},
-			{
-				id: 4,
-				start: new Date(2020, 4, 28, 12, 0),
-				end: new Date(2020, 4, 28, 18, 0),
-				title: 'event 4',
-				description: 'this is event 4',
-			},
-		],
-		current: null,
+		token: localStorage.getItem('token'),
+		isAuthenticated: null,
+		loading: true,
+		user: null,
+		error: null,
 	};
 
-	const [state, dispatch] = useReducer(eventReducer, initialState);
+	const [state, dispatch] = useReducer(authReducer, initialState);
 
-	const getEvents = (event) => {};
-	const addEvent = (event) => {
-		event.id = uuid.v4();
-		dispatch({ type: ADD_EVENT, payload: event });
+	// Load User
+	const loadUser = async () => {
+		setAuthToken(localStorage.token);
+
+		try {
+			const res = await axios.get('/api/auth');
+
+			dispatch({
+				type: USER_LOADED,
+				payload: res.data,
+			});
+		} catch (err) {
+			dispatch({ type: AUTH_ERROR });
+		}
 	};
-	const editEvent = (event) => {
-		dispatch({ type: UPDATE_EVENT, payload: event });
+
+	// Register User
+	const register = async (formData) => {
+		const config = {
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		};
+
+		try {
+			const res = await axios.post('api/users', formData, config);
+
+			dispatch({
+				type: REGISTER_SUCCESS,
+				payload: res.data,
+			});
+
+			loadUser();
+		} catch (err) {
+			dispatch({
+				type: REGISTER_FAIL,
+				payload: err.response.data.msg,
+			});
+		}
 	};
-	const deleteEvent = (id) => {
-		dispatch({ type: DELETE_EVENT, payload: id });
+
+	// Login User
+	const login = async (formData) => {
+		const config = {
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		};
+
+		try {
+			const res = await axios.post('/api/auth', formData, config);
+
+			dispatch({
+				type: LOGIN_SUCCESS,
+				payload: res.data,
+			});
+
+			loadUser();
+		} catch (err) {
+			dispatch({
+				type: LOGIN_FAIL,
+				payload: err.response.data.msg,
+			});
+		}
 	};
-	const setCurrentEvent = (event) => {
-		dispatch({ type: SET_CURRENT_EVENT, payload: event });
-	};
-	const clearCurrentEvent = () => {
-		dispatch({ type: CLEAR_CURRENT_EVENT });
-	};
+
+	// Logout
+	const logout = () => dispatch({ type: LOGOUT });
+
+	// Clear Errors
+	const clearErrors = () => dispatch({ type: CLEAR_ERRORS });
 
 	return (
-		<EventContext.Provider
+		<AuthContext.Provider
 			value={{
-				events: state.events,
-				current: state.current,
-				addEvent,
-				editEvent,
-				deleteEvent,
-				setCurrentEvent,
-				clearCurrentEvent,
+				token: state.token,
+				isAuthenticated: state.isAuthenticated,
+				loading: state.loading,
+				user: state.user,
+				error: state.error,
+				register,
+				loadUser,
+				login,
+				logout,
+				clearErrors,
 			}}
 		>
 			{props.children}
-		</EventContext.Provider>
+		</AuthContext.Provider>
 	);
 };
 
-export default EventState;
+export default AuthState;
