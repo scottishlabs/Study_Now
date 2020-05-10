@@ -1,37 +1,21 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, Fragment } from 'react';
 import EventItem from './EventItem';
 import EventContext from '../../../../context/events/eventContext';
 import TodoContext from '../../../../context/todo/todoContext';
 
 const Events = ({ date, isDisabled }) => {
-	const eventContext = useContext(EventContext);
-	const {
-		events,
-		current,
-		addEvent,
-		updateEvent,
-		deleteEvent,
-		setCurrentEvent,
-		clearCurrentEvent,
-	} = eventContext;
-
 	const todoContext = useContext(TodoContext);
 	const { todos } = todoContext;
 
-	const datesAreOnSameDay = (first, second) =>
-		first.getFullYear() === second.getFullYear() &&
-		first.getMonth() === second.getMonth() &&
-		first.getDate() === second.getDate();
+	const eventContext = useContext(EventContext);
+	const { events } = eventContext;
 
 	const currentEventsFilter = () => {
 		return events.filter(
 			(event) =>
-				date >= getDateOnly(event.start) && date <= getDateOnly(event.end)
+				date >= getDateOnly(new Date(event.start)) &&
+				date <= getDateOnly(new Date(event.end))
 		);
-	};
-
-	const currentTodosFilter = () => {
-		return todos.filter((todo) => datesAreOnSameDay(date, todo.deadline));
 	};
 
 	const getDateOnly = (currentDate) => {
@@ -42,22 +26,54 @@ const Events = ({ date, isDisabled }) => {
 		);
 	};
 
+	const datesAreOnSameDay = (first, second) =>
+		first.getFullYear() === second.getFullYear() &&
+		first.getMonth() === second.getMonth() &&
+		first.getDate() === second.getDate();
+
 	const currentEvents = currentEventsFilter();
-	const currentTodos = currentTodosFilter();
+
+	const currentTodoItems = () => {
+		const currentTodos = todos.filter((todo) =>
+			datesAreOnSameDay(date, new Date(todo.deadline))
+		);
+
+		const currentTodosList = currentTodos.map((event) => (
+			<EventItem key={event._id} event={event} />
+		));
+
+		return currentTodosList;
+	};
+
+	const isEvent = () => {
+		const currentTodos = todos.filter((todo) =>
+			datesAreOnSameDay(date, new Date(todo.deadline))
+		);
+
+		if (currentTodos.length > 0 || currentEvents.length > 0) {
+			return (
+				<div className='events-sm-container text-center'>
+					<span className='events-sm'></span>
+				</div>
+			);
+		}
+		return <></>;
+	};
 
 	return (
-		<div
-			className={`dateEvents d-none d-md-block  ${
-				isDisabled ? 'disabled' : ''
-			}`}
-		>
-			{currentEvents.map((event) => (
-				<EventItem key={event.id} event={event} />
-			))}
-			{currentTodos.map((event) => (
-				<EventItem key={event.id} event={event} />
-			))}
-		</div>
+		<Fragment>
+			{isEvent()}
+			<div
+				className={`dateEvents d-none d-md-block  ${
+					isDisabled ? 'disabled' : ''
+				}`}
+			>
+				{currentEvents.map((event) => (
+					<EventItem key={event._id} event={event} />
+				))}
+				{currentTodoItems()}
+			</div>
+		</Fragment>
 	);
 };
 

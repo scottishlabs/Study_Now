@@ -1,7 +1,7 @@
 import React, { useReducer } from 'react';
 import EventContext from './eventContext';
 import eventReducer from './eventReducer';
-import uuid from 'uuid';
+import axios from 'axios';
 
 import {
 	GET_EVENTS,
@@ -10,59 +10,102 @@ import {
 	DELETE_EVENT,
 	SET_CURRENT_EVENT,
 	CLEAR_CURRENT_EVENT,
+	EVENT_ERROR,
 } from '../types';
 
 const EventState = (props) => {
 	const initialState = {
-		events: [
-			{
-				id: 1,
-				start: new Date(2020, 4, 27, 12, 0),
-				end: new Date(2020, 4, 27, 18, 30),
-				title: 'event 1',
-				description: 'this is event 1',
-			},
-			{
-				id: 2,
-				start: new Date(2020, 4, 27, 11, 0),
-				end: new Date(2020, 4, 27, 16, 0),
-				title: 'event 2',
-				description: 'this is event 2',
-			},
-			{
-				id: 3,
-				start: new Date(2020, 4, 27, 12, 0),
-				end: new Date(2020, 4, 28, 18, 0),
-				title: 'event 3',
-				description: 'this is event 3',
-			},
-			{
-				id: 4,
-				start: new Date(2020, 4, 28, 12, 0),
-				end: new Date(2020, 4, 28, 18, 0),
-				title: 'event 4',
-				description: 'this is event 4',
-			},
-		],
+		events: null,
 		current: null,
+		error: null,
 	};
 
 	const [state, dispatch] = useReducer(eventReducer, initialState);
 
-	const getEvents = (event) => {};
-	const addEvent = (event) => {
-		event.id = uuid.v4();
-		dispatch({ type: ADD_EVENT, payload: event });
+	const getEvents = async () => {
+		try {
+			const res = await axios.get('/api/events');
+
+			dispatch({
+				type: GET_EVENTS,
+				payload: res.data,
+			});
+		} catch (err) {
+			dispatch({
+				type: EVENT_ERROR,
+				payload: err.response.msg,
+			});
+		}
 	};
-	const editEvent = (event) => {
-		dispatch({ type: UPDATE_EVENT, payload: event });
+
+	const addEvent = async (event) => {
+		const config = {
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		};
+
+		try {
+			const res = await axios.post('/api/events', event, config);
+
+			dispatch({
+				type: ADD_EVENT,
+				payload: res.data,
+			});
+		} catch (err) {
+			dispatch({
+				type: EVENT_ERROR,
+				payload: err.response.msg,
+			});
+		}
 	};
-	const deleteEvent = (id) => {
-		dispatch({ type: DELETE_EVENT, payload: id });
+
+	const editEvent = async (event) => {
+		const config = {
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		};
+
+		console.log(event);
+
+		try {
+			const res = await axios.put(`/api/events/${event._id}`, event, config);
+
+			console.log(res.data);
+
+			dispatch({
+				type: UPDATE_EVENT,
+				payload: res.data,
+			});
+		} catch (err) {
+			dispatch({
+				type: EVENT_ERROR,
+				payload: err.response.msg,
+			});
+		}
 	};
+
+	const deleteEvent = async (id) => {
+		try {
+			await axios.delete(`/api/events/${id}`);
+
+			dispatch({
+				type: DELETE_EVENT,
+				payload: id,
+			});
+		} catch (err) {
+			dispatch({
+				type: EVENT_ERROR,
+				payload: err.response.msg,
+			});
+		}
+	};
+
 	const setCurrentEvent = (event) => {
 		dispatch({ type: SET_CURRENT_EVENT, payload: event });
 	};
+
 	const clearCurrentEvent = () => {
 		dispatch({ type: CLEAR_CURRENT_EVENT });
 	};
@@ -72,6 +115,8 @@ const EventState = (props) => {
 			value={{
 				events: state.events,
 				current: state.current,
+				error: state.error,
+				getEvents,
 				addEvent,
 				editEvent,
 				deleteEvent,

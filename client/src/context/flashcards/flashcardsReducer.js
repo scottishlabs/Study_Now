@@ -10,6 +10,7 @@ import {
 	SET_FLASHCARD_ACTIVE,
 	SET_FLASHCARD_INACTIVE,
 	SET_ALL_FLASHCARDS_ACTIVE,
+	FLASHCARD_ERROR,
 } from '../types';
 
 export default (state, action) => {
@@ -18,12 +19,13 @@ export default (state, action) => {
 			return {
 				...state,
 				flashcards: action.payload,
+				loading: false,
 			};
 		case ADD_FLASHCARD:
 			return {
 				...state,
 				flashcards: [...state.flashcards, action.payload],
-				active: [...state.active, action.payload],
+				loading: false,
 			};
 		case UPDATE_FLASHCARD:
 			return {
@@ -31,12 +33,7 @@ export default (state, action) => {
 				flashcards: state.flashcards.map((flashcard) =>
 					flashcard.id === action.payload.id ? action.payload : flashcard
 				),
-				active: state.active.map((flashcard) =>
-					flashcard.id === action.payload.id ? action.payload : flashcard
-				),
-				inactive: state.flashcards.map((flashcard) =>
-					flashcard.id === action.payload.id ? action.payload : flashcard
-				),
+				loading: false,
 			};
 		case DELETE_FLASHCARD:
 			return {
@@ -44,12 +41,7 @@ export default (state, action) => {
 				flashcards: state.flashcards.filter(
 					(flashcard) => flashcard.id !== action.payload
 				),
-				active: state.active.filter(
-					(flashcard) => flashcard.id !== action.payload
-				),
-				inactive: state.inactive.filter(
-					(flashcard) => flashcard.id !== action.payload
-				),
+				loading: false,
 			};
 		case SET_CURRENT_FLASHCARD:
 			return {
@@ -74,27 +66,10 @@ export default (state, action) => {
 				...state,
 				filtered: null,
 			};
-		case SET_FLASHCARD_ACTIVE:
+		case FLASHCARD_ERROR:
 			return {
 				...state,
-				inactive: state.inactive.filter(
-					(flashcard) => flashcard.id !== action.payload.id
-				),
-				active: [...state.active, action.payload],
-			};
-		case SET_FLASHCARD_INACTIVE:
-			return {
-				...state,
-				active: state.active.filter(
-					(flashcard) => flashcard.id !== action.payload.id
-				),
-				inactive: [...state.inactive, action.payload],
-			};
-		case SET_ALL_FLASHCARDS_ACTIVE:
-			return {
-				...state,
-				active: state.flashcards,
-				inactive: [],
+				error: action.payload,
 			};
 		default:
 			return state;

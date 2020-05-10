@@ -60,9 +60,9 @@ router.put('/:id', auth, async (req, res) => {
 
 	const eventFields = {};
 	if (title) eventFields.title = title;
-	if (start) eventFields.title = title;
-	if (end) eventFields.title = title;
-	if (description) eventFields.title = title;
+	if (start) eventFields.start = start;
+	if (end) eventFields.end = end;
+	if (description) eventFields.description = description;
 
 	try {
 		let event = await Event.findById(req.params.id);

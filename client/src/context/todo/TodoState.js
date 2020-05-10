@@ -1,7 +1,7 @@
 import React, { useReducer } from 'react';
+import axios from 'axios';
 import TodoContext from './todoContext';
 import todoReducer from './todoReducer';
-import uuid from 'uuid';
 import {
 	GET_TODOS,
 	ADD_TODO,
@@ -16,133 +16,18 @@ import {
 	SORT_TODOS_DEADLINE,
 	SORT_TODOS_ALPHABETICAL,
 	SORT_TODOS_PRIORITY,
+	TODO_ERROR,
+	SUBTODO_ERROR,
+	GET_SUBTODOS,
 } from '../types';
 
 const TodoState = (props) => {
 	const initialState = {
-		todos: [
-			{
-				id: 1,
-				name: 'get milk',
-				description: 'Go to the supermarket and get milk',
-				isCompleted: false,
-				urgent: true,
-				important: true,
-				deadline: new Date(2020, 4, 3),
-			},
-			{
-				id: 2,
-				name: 'get bread 2',
-				description: 'go to the supermarket and get bread 2',
-				isCompleted: false,
-				urgent: true,
-				important: false,
-				deadline: new Date(),
-			},
-			{
-				id: 3,
-				name: 'get bread 3',
-				description: 'go to the supermarket and get bread 3',
-				isCompleted: true,
-				urgent: false,
-				important: true,
-				deadline: new Date(2200, 11, 17),
-			},
-			{
-				id: 4,
-				name: 'get bread 3',
-				description: 'go to the supermarket and get bread 3',
-				isCompleted: false,
-				urgent: false,
-				important: false,
-				deadline: new Date(),
-			},
-			{
-				id: 5,
-				name: 'get bread 5',
-				description: 'go to the supermarket and get bread 5',
-				isCompleted: true,
-				urgent: false,
-				important: false,
-				deadline: new Date(),
-			},
-		],
-		subTodos: [
-			{
-				id: 6,
-				subTodoId: 1,
-				name: 'go to supermarket',
-				isCompleted: true,
-			},
-			{
-				id: 7,
-				subTodoId: 1,
-				name: 'get milk',
-				isCompleted: false,
-			},
-			{
-				id: 8,
-				subTodoId: 1,
-				name: 'get milk',
-				isCompleted: false,
-			},
-			{
-				id: 9,
-				subTodoId: 1,
-				name: 'get milk',
-				isCompleted: false,
-			},
-			{
-				id: 10,
-				subTodoId: 1,
-				name: 'get milk',
-				isCompleted: false,
-			},
-			{
-				id: 11,
-				subTodoId: 1,
-				name: 'get milk',
-				isCompleted: false,
-			},
-			{
-				id: 12,
-				subTodoId: 1,
-				name: 'get milk',
-				isCompleted: false,
-			},
-			{
-				id: 13,
-				subTodoId: 1,
-				name: 'get milk',
-				isCompleted: false,
-			},
-			{
-				id: 14,
-				subTodoId: 1,
-				name: 'get milk',
-				isCompleted: false,
-			},
-			{
-				id: 15,
-				subTodoId: 1,
-				name: 'get milk',
-				isCompleted: false,
-			},
-			{
-				id: 16,
-				subTodoId: 1,
-				name: 'get milk',
-				isCompleted: false,
-			},
-			{
-				id: 17,
-				subTodoId: 1,
-				name: 'get milk',
-				isCompleted: false,
-			},
-		],
+		todos: null,
+		subTodos: null,
 		current: null,
 		filtered: null,
+		error: null,
 	};
 
 	// Initial state of the context and the reducer to execute updates to context
@@ -151,53 +36,203 @@ const TodoState = (props) => {
 	// The following dispatches the called update to the reducer to update state
 
 	// Get Todos
+	const getTodos = async () => {
+    
+		try {
+			const res = await axios.get('/api/todos');
+
+			dispatch({
+				type: GET_TODOS,
+				payload: res.data,
+			});
+		} catch (err) {
+			dispatch({
+				type: TODO_ERROR,
+				payload: err.response.msg,
+			});
+		}
+	};
+
+	// Get SubTodos
+	const getSubTodos = async () => {
+		try {
+			const res = await axios.get('/api/subTodos');
+
+			dispatch({
+				type: GET_SUBTODOS,
+				payload: res.data,
+			});
+		} catch (err) {
+			dispatch({
+				type: SUBTODO_ERROR,
+				payload: err.response.msg,
+			});
+		}
+	};
 
 	// Add Todo
-	const addTodo = (todo) => {
-		todo.id = uuid.v4();
-		dispatch({ type: ADD_TODO, payload: todo });
+	const addTodo = async (todo) => {
+		const config = {
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		};
+
+		try {
+			const res = await axios.post('/api/todos', todo, config);
+
+			dispatch({
+				type: ADD_TODO,
+				payload: res.data,
+			});
+		} catch (err) {
+			dispatch({
+				type: TODO_ERROR,
+				payload: err.response.msg,
+			});
+		}
 	};
+
 	// Add SubTodo
-	const addSubTodo = (subTodo) => {
-		subTodo.id = uuid.v4();
-		dispatch({ type: ADD_SUBTODO, payload: subTodo });
+	const addSubTodo = async (subTodo) => {
+		const config = {
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		};
+
+		try {
+			const res = await axios.post('/api/subTodos', subTodo, config);
+
+			dispatch({
+				type: ADD_SUBTODO,
+				payload: res.data,
+			});
+		} catch (err) {
+			dispatch({
+				type: SUBTODO_ERROR,
+				payload: err.response.msg,
+			});
+		}
 	};
+
 	// Delete Todo
-	const deleteTodo = (id) => {
-		dispatch({ type: DELETE_TODO, payload: id });
+	const deleteTodo = async (id) => {
+		try {
+			await axios.delete(`/api/todos/${id}`);
+
+			const currentSubTodos = state.subTodos.filter(
+				(subTodo) => id === subTodo.subTodoId
+			);
+
+			currentSubTodos.forEach((subTodo) => {
+				axios.delete(`/api/subTodos/${subTodo._id}`);
+			});
+
+			dispatch({
+				type: DELETE_TODO,
+				payload: id,
+			});
+		} catch (err) {
+			dispatch({
+				type: TODO_ERROR,
+				payload: err.response.msg,
+			});
+		}
 	};
+
 	// Delete SubTodo
-	const deleteSubTodo = (id) => {
-		dispatch({ type: DELETE_SUBTODO, payload: id });
+	const deleteSubTodo = async (id) => {
+		try {
+			await axios.delete(`/api/subTodos/${id}`);
+
+			dispatch({
+				type: DELETE_SUBTODO,
+				payload: id,
+			});
+		} catch (err) {
+			dispatch({
+				type: SUBTODO_ERROR,
+				payload: err.response.msg,
+			});
+		}
 	};
+
+	// Update Todo
+	const updateTodo = async (todo) => {
+		const config = {
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		};
+
+		try {
+			const res = await axios.put(`/api/todos/${todo._id}`, todo, config);
+
+			dispatch({
+				type: UPDATE_TODO,
+				payload: res.data,
+			});
+		} catch (err) {
+			dispatch({
+				type: TODO_ERROR,
+				payload: err.response.msg,
+			});
+		}
+	};
+
+	// Update Sub-Todo
+	const updateSubTodo = async (subTodo) => {
+		const config = {
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		};
+
+		try {
+			const res = await axios.put(
+				`/api/subTodos/${subTodo._id}`,
+				subTodo,
+				config
+			);
+
+			dispatch({
+				type: UPDATE_SUBTODO,
+				payload: res.data,
+			});
+		} catch (err) {
+			dispatch({
+				type: SUBTODO_ERROR,
+				payload: err.response.msg,
+			});
+		}
+	};
+
 	// Select Current Todo
 	const setCurrent = (todo) => {
 		dispatch({ type: SET_CURRENT, payload: todo });
 	};
-	// Update Todo
-	const updateTodo = (todo) => {
-		dispatch({ type: UPDATE_TODO, payload: todo });
-	};
-	// Update Sub-Todo
-	const updateSubTodo = (subTodo) => {
-		dispatch({ type: UPDATE_SUBTODO, payload: subTodo });
-	};
+
 	// Filter Todos
 	const filterTodos = (text) => {
 		dispatch({ type: FILTER_TODOS, payload: text });
 	};
+
 	// Clear Filter
 	const clearFilter = () => {
 		dispatch({ type: CLEAR_FILTER });
 	};
+
 	// Sort Todos by priority
 	const prioritySort = () => {
 		dispatch({ type: SORT_TODOS_PRIORITY });
 	};
+
 	// Sort Todos by deadline
 	const deadlineSort = () => {
 		dispatch({ type: SORT_TODOS_DEADLINE });
 	};
+
 	// Sort Todos by A - Z
 	const alphabeticalSort = () => {
 		dispatch({ type: SORT_TODOS_ALPHABETICAL });
@@ -211,6 +246,9 @@ const TodoState = (props) => {
 				subTodos: state.subTodos,
 				current: state.current,
 				filtered: state.filtered,
+				error: state.error,
+				getTodos,
+				getSubTodos,
 				addTodo,
 				addSubTodo,
 				updateTodo,

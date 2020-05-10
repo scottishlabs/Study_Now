@@ -20,9 +20,10 @@ const AddForm = ({ setIsAdd, setIsActive }) => {
 		title: '',
 		front: '',
 		back: '',
+		isActive: true,
 	});
 
-	const { title, front, back } = form;
+	const { title, front, back, isActive } = form;
 
 	const onChange = (e) => {
 		setForm({ ...form, [e.target.id]: e.target.value });

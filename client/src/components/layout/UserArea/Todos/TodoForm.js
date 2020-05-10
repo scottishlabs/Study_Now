@@ -1,9 +1,11 @@
 import React, { useContext, useState, useEffect, Fragment } from 'react';
 import TodoContext from '../../../../context/todo/todoContext';
-import DateTimePicker from 'react-datetime-picker';
+import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import SubTodoItem from './SubTodoItem';
 import './Todos.css';
+import 'react-datepicker/dist/react-datepicker.css';
+import parseISO from 'date-fns/parseISO';
 
 // A component that contains all the forms for the currently selected todo
 const TodoForm = ({ isActive, setIsActive }) => {
@@ -23,8 +25,8 @@ const TodoForm = ({ isActive, setIsActive }) => {
 	useEffect(() => {
 		setCurrentSubTodos(subTodos);
 		if (current !== null) {
-			setPayload(current);
-			setNewSubTodo({ ...newSubTodo, subTodoId: current.id });
+			setPayload({ ...current, deadline: parseISO(current.deadline) });
+			setNewSubTodo({ ...newSubTodo, subTodoId: current._id });
 		} else {
 			setPayload({
 				name: '',
@@ -40,7 +42,6 @@ const TodoForm = ({ isActive, setIsActive }) => {
 
 	// The initial state of a new sub todo object
 	const [newSubTodo, setNewSubTodo] = useState({
-		subTodoId: null,
 		name: '',
 		isCompleted: false,
 	});
@@ -78,14 +79,14 @@ const TodoForm = ({ isActive, setIsActive }) => {
 		// Adds a new sub todo to the context (as long as the input is not empty)
 		const handleAddSubTodo = () => {
 			if (newSubTodo.name !== '') {
-				addSubTodo(newSubTodo);
+				addSubTodo({ ...newSubTodo, subTodoId: current._id });
 				setNewSubTodo({ ...newSubTodo, name: '' });
 			}
 		};
 
 		// Deletes the currently selected todo from context
 		const handleDeleteTodo = () => {
-			deleteTodo(current.id);
+			deleteTodo(current._id);
 			setCurrent(null);
 		};
 
@@ -94,7 +95,7 @@ const TodoForm = ({ isActive, setIsActive }) => {
 			let thisSubTodos = null;
 			if (current !== null) {
 				thisSubTodos = currentSubTodos.filter(
-					(subTodo) => current.id === subTodo.subTodoId
+					(subTodo) => current._id === subTodo.subTodoId
 				);
 			}
 
@@ -127,8 +128,8 @@ const TodoForm = ({ isActive, setIsActive }) => {
 						{thisSubTodos && thisSubTodos.length > 0 ? (
 							thisSubTodos.map((subTodo) => (
 								<SubTodoItem
-									key={subTodo.id}
-									id={subTodo.id}
+									key={subTodo._id}
+									id={subTodo._id}
 									subTodo={subTodo}
 								/>
 							))
@@ -156,7 +157,6 @@ const TodoForm = ({ isActive, setIsActive }) => {
 			);
 		} else {
 			const {
-				id,
 				name,
 				description,
 				isCompleted,
@@ -236,14 +236,13 @@ const TodoForm = ({ isActive, setIsActive }) => {
 						<label className='text-white col-12  p-0' htmlFor='deadline'>
 							Deadline:
 						</label>
-						<DateTimePicker
+						<DatePicker
 							className='form-control col-12'
 							id='deadline'
 							minDate={new Date()}
-							value={deadline}
+							selected={deadline}
 							onChange={(e) => onChangeDate(e)}
 							disabled={!isEditing}
-							clearIcon={null}
 						/>
 					</div>
 					<div className='custom-control custom-checkbox mt-4'>
@@ -252,7 +251,7 @@ const TodoForm = ({ isActive, setIsActive }) => {
 							id='urgent'
 							className='custom-control-input'
 							checked={urgent}
-							onChange={onChange}
+							onChange={() => setPayload({ ...payload, urgent: !urgent })}
 							disabled={!isEditing}
 						/>
 						<label className='custom-control-label text-white' htmlFor='urgent'>
@@ -265,7 +264,7 @@ const TodoForm = ({ isActive, setIsActive }) => {
 							id='important'
 							className='custom-control-input'
 							checked={important}
-							onChange={onChange}
+							onChange={() => setPayload({ ...payload, important: !important })}
 							disabled={!isEditing}
 						/>
 						<label

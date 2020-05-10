@@ -1,10 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, Fragment, useEffect, useContext } from 'react';
 import moment from 'moment';
 import './CalendarArea.css';
 import AddEditArea from './AddEditArea';
 import Events from './Events';
+import EventContext from '../../../../context/events/eventContext';
+import TodoContext from '../../../../context/todo/todoContext';
 
 const CalendarArea = () => {
+	useEffect(() => {
+		getTodos();
+		getSubTodos();
+		getEvents();
+		// eslint-disable-next-line
+	}, []);
+
+	const todoContext = useContext(TodoContext);
+	const { todos, subTodos, getTodos, getSubTodos, loading } = todoContext;
+
+	const eventContext = useContext(EventContext);
+	const { events, getEvents } = eventContext;
+
 	const [currentMonth, setCurrentMonth] = useState(new Date());
 	const [selectedDate, setSelectedDate] = useState(new Date());
 	const [isAdd, setIsAdd] = useState(false);
@@ -125,30 +140,38 @@ const CalendarArea = () => {
 	};
 
 	return (
-		<div className=''>
-			<div className='containerWrap'>
-				<div className='topBar w-100 py-3 px-3' style={{ height: '70px' }}>
-					<div className='btn btn-primary float-right' onClick={onAddEvent}>
-						New Event
-						<i className='ml-2 fas fa-edit'></i>
+		<Fragment>
+			{todos !== null && subTodos !== null && events !== null && !loading ? (
+				<div className='containerWrap'>
+					<div className='topBar w-100 py-3 px-3' style={{ height: '70px' }}>
+						<div className='btn btn-primary float-right' onClick={onAddEvent}>
+							New Event
+							<i className='ml-2 fas fa-edit'></i>
+						</div>
+					</div>
+					<div className='calendar'>
+						{drawHeader()}
+						{drawDays()}
+						{drawCells()}
+					</div>
+					<div className='p-0'>
+						<AddEditArea
+							isAdd={isAdd}
+							setIsAdd={setIsAdd}
+							setIsActive={setIsActive}
+							isActive={isActive}
+							selectedDate={selectedDate}
+						/>
 					</div>
 				</div>
-				<div className='calendar'>
-					{drawHeader()}
-					{drawDays()}
-					{drawCells()}
+			) : (
+				<div className='d-flex h-100 justify-content-center'>
+					<div className='spinner-border spinner-lg m-auto' role='status'>
+						<span className='sr-only'>Loading...</span>
+					</div>
 				</div>
-				<div className='p-0'>
-					<AddEditArea
-						isAdd={isAdd}
-						setIsAdd={setIsAdd}
-						setIsActive={setIsActive}
-            isActive={isActive}
-            selectedDate={selectedDate}
-					/>
-				</div>
-			</div>
-		</div>
+			)}
+		</Fragment>
 	);
 };
 export default CalendarArea;

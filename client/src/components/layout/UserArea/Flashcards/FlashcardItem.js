@@ -25,7 +25,7 @@ const FlashcardItem = ({ flashcard, setIsActive }) => {
 	};
 
 	const handleDeleteTodo = () => {
-		deleteFlashcard(flashcard.id);
+		deleteFlashcard(flashcard._id);
 		setIsActive(false);
 		clearCurrentFlashcard();
 	};

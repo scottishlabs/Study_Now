@@ -31,12 +31,13 @@ router.post(
 			return res.status(400).json({ errors: errors.array() });
 		}
 
-		const { name, isCompleted } = req.body;
+		const { name, isCompleted, subTodoId } = req.body;
 
 		try {
 			const newSubTodo = new SubTodo({
 				name,
 				isCompleted,
+				subTodoId,
 				user: req.user.id,
 			});
 

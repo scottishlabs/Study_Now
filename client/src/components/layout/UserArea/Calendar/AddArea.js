@@ -1,6 +1,9 @@
 import React, { useState, useContext } from 'react';
-import DateTimePicker from 'react-datetime-picker';
 import EventContext from '../../../../context/events/eventContext';
+import AlertContext from '../../../../context/alert/alertContext';
+import 'react-datepicker/dist/react-datepicker.css';
+import parseISO from 'date-fns/parseISO';
+import DatePicker from 'react-datepicker';
 
 const AddArea = ({ setIsAdd, setIsActive, date }) => {
 	const eventContext = useContext(EventContext);
@@ -14,21 +17,33 @@ const AddArea = ({ setIsAdd, setIsActive, date }) => {
 		clearCurrentEvent,
 	} = eventContext;
 
+	const alertContext = useContext(AlertContext);
+	const { setAlert } = alertContext;
+
 	const [form, setForm] = useState({
-		id: null,
 		start: new Date(),
 		end: new Date(),
 		title: '',
 		description: '',
 	});
 
-	const { id, start, end, title, description } = form;
+	const { start, end, title, description } = form;
 
 	const formChange = (e) => {
 		setForm({ ...form, [e.target.id]: e.target.value });
 	};
 
-	const onSubmit = () => {
+	const onChangeStart = (e) => {
+		setForm({ ...form, start: e });
+	};
+
+	const onChangeEnd = (e) => {
+		setForm({ ...form, end: e });
+	};
+
+	const onSubmit = (e) => {
+		e.preventDefault();
+		setForm({ ...form, start: parseISO(form.start), end: parseISO(form.end) });
 		addEvent(form);
 		setIsActive(false);
 		setIsAdd(false);
@@ -42,7 +57,7 @@ const AddArea = ({ setIsAdd, setIsActive, date }) => {
 	};
 
 	return (
-		<form className='text-white'>
+		<form className='text-white' onSubmit={onSubmit}>
 			<div className='row'>
 				<div className='col-11 p-0 eventUnselectable'>
 					<h1>Add Event</h1>
@@ -71,23 +86,23 @@ const AddArea = ({ setIsAdd, setIsActive, date }) => {
 			</div>
 			<div className='form-group'>
 				<label htmlFor='start'>Start Date</label>
-				<DateTimePicker
+				<DatePicker
 					id='start'
-					value={start}
-					onChange={formChange}
+					selected={start}
+					onChange={(e) => onChangeStart(e)}
 					className='form-control'
-					clearIcon={null}
+					maxDate={end}
 					required
 				/>
 			</div>
 			<div className='form-group'>
 				<label htmlFor='end'>End Date</label>
-				<DateTimePicker
+				<DatePicker
 					id='end'
-					value={end}
-					onChange={formChange}
+					selected={end}
+					onChange={(e) => onChangeEnd(e)}
 					className='form-control'
-					clearIcon={null}
+					minDate={start}
 					required
 				/>
 			</div>
@@ -100,13 +115,12 @@ const AddArea = ({ setIsAdd, setIsActive, date }) => {
 					value={description}
 					onChange={formChange}
 					className='form-control'
-					required
 				/>
 			</div>
 			<div className='d-flex flex-column mt-4'>
-				<div className='btn btn-block btn-success' onClick={onSubmit}>
+				<button type='submit' className='btn btn-block btn-success'>
 					<i className='fas fa-check'></i>
-				</div>
+				</button>
 			</div>
 		</form>
 	);

@@ -1,27 +1,33 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import TodoContext from '../../../../context/todo/todoContext';
 
 const TodoItem = ({ todo, setIsActive }) => {
 	const todoContext = useContext(TodoContext);
 	const { updateTodo, setCurrent, deleteTodo } = todoContext;
 
-	const { id, name, isCompleted, urgent, important } = todo;
+	const [todoItem, setTodoItem] = useState(todo);
+	const { _id, name, isCompleted, urgent, important } = todoItem;
+
+	useEffect(() => {
+		setTodoItem(todo);
+	}, []);
 
 	// Deletes todo by id from context and the interface
 	const handleDeleteTodo = () => {
-		deleteTodo(id);
+		deleteTodo(_id);
 		setCurrent(null);
 	};
 
 	// Sets the complete property of the todo
 	const handleCheck = () => {
-		updateTodo({ ...todo, isCompleted: !isCompleted });
+		setTodoItem({ ...todoItem, isCompleted: !isCompleted });
+		updateTodo({ ...todoItem, isCompleted: !isCompleted });
 	};
 
 	// Sets the current property of context to this todo and opens the todo form sidebar
 	const handleTodoSelect = (e) => {
-		setIsActive(true);
 		setCurrent(todo);
+		setIsActive(true);
 	};
 
 	// Renders the individual todo item which can be selected, checked and deleted
@@ -37,7 +43,7 @@ const TodoItem = ({ todo, setIsActive }) => {
 						<input
 							type='checkbox'
 							className='custom-control-input'
-							id={id}
+							id={_id}
 							checked={isCompleted}
 							onChange={handleCheck}
 						/>
@@ -48,7 +54,7 @@ const TodoItem = ({ todo, setIsActive }) => {
 									? { textDecoration: ' line-through' }
 									: { textDecoration: '' }
 							}
-							htmlFor={id}
+							htmlFor={_id}
 						>
 							{name}
 						</label>

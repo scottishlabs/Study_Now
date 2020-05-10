@@ -1,5 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import FlashcardsContext from '../../../../context/flashcards/flashcardsContext';
+import cloneDeep from 'lodash/cloneDeep';
 
 const StudyArea = ({ isStudying, setIsStudying }) => {
 	const flashcardsContext = useContext(FlashcardsContext);
@@ -7,8 +8,7 @@ const StudyArea = ({ isStudying, setIsStudying }) => {
 		flashcards,
 		current,
 		filtered,
-		active,
-		inactive,
+		getFlashcards,
 		addFlashcard,
 		updateFlashcard,
 		deleteFlashcard,
@@ -16,32 +16,73 @@ const StudyArea = ({ isStudying, setIsStudying }) => {
 		clearCurrentFlashcard,
 		filterFlashcards,
 		clearFilterFlashcards,
-		setFlashcardActive,
-		setFlashcardInactive,
-		setAllFlashcardsActive,
 	} = flashcardsContext;
 
 	const [isAnswered, setIsAnswered] = useState(false);
 
+	const [status, setStatus] = useState({
+		active: flashcards.filter((flashcard) => flashcard.isActive === true),
+		inactive: flashcards.filter((flashcard) => flashcard.isActive === false),
+	});
+
+	useEffect(() => {
+		updateStatus();
+		getFlashcards();
+	}, [flashcards]);
+
+	const { active, inactive } = status;
+
+	const [ptr, setPtr] = useState(0);
+	const [selectCard, setSelectCard] = useState(active[0]);
+
+	const getActive = () => {
+		return flashcards.filter((flashcard) => flashcard.isActive === true);
+	};
+
+	const getInactive = () => {
+		return flashcards.filter((flashcard) => flashcard.isActive === false);
+	};
+
+	const updateStatus = () => {
+		setStatus({ ...status, active: getActive(), inactive: getInactive() });
+	};
+
+	const updateInactive = (card) => {
+		updateFlashcard({ ...card, isActive: false });
+	};
+
+	const updateActive = (card) => {
+		updateFlashcard({ ...card, isActive: true });
+	};
+
 	const setInactiveBad = () => {
 		const currentCard = active[0];
-		setFlashcardInactive(currentCard);
+		updateInactive(currentCard);
+		selectACard();
+		setTimeout(() => updateActive(currentCard), 5000, currentCard);
 		setIsAnswered(false);
-		setTimeout(setFlashcardActive, 60000, currentCard);
 	};
 
 	const setInactiveGood = () => {
 		const currentCard = active[0];
-		setTimeout(setFlashcardActive, 3600000, currentCard);
-		setFlashcardInactive(currentCard);
+		updateInactive(currentCard);
+		selectACard();
+
+		setTimeout(() => updateActive(currentCard), 3600000, currentCard);
 		setIsAnswered(false);
 	};
 
 	const setInactivePerfect = () => {
 		const currentCard = active[0];
-		setTimeout(setFlashcardActive, 86400000, currentCard);
-		setFlashcardInactive(currentCard);
+		updateInactive(currentCard);
+		selectACard();
+
+		setTimeout(() => updateActive(currentCard), 86400000, currentCard);
 		setIsAnswered(false);
+	};
+
+	const selectACard = () => {
+		setSelectCard(active[ptr]);
 	};
 
 	return (
@@ -56,14 +97,14 @@ const StudyArea = ({ isStudying, setIsStudying }) => {
 				</div>
 			</div>
 			<div className='container text-dark d-flex flex-column flex-center'>
-				{active.length === 0 ? (
+				{!selectCard || active.length === 0 ? (
 					<div className='container bg-white text-center p-4'>
 						<h5 className=''>No cards available comeback later!</h5>
 					</div>
 				) : isAnswered ? (
 					<>
 						<div className='flashcardContainer my-4 py-5 px-4 px-lg-5 container bg-white'>
-							<h4>{active[0].back}</h4>
+							<h4>{selectCard.back}</h4>
 						</div>
 						<div className='m-4 d-flex flex-row'>
 							<div
@@ -89,7 +130,7 @@ const StudyArea = ({ isStudying, setIsStudying }) => {
 				) : (
 					<>
 						<div className='flashcardContainer my-4 py-5 px-4 px-lg-5 container bg-white'>
-							<h4>{active[0].front}</h4>
+							<h4>{selectCard.front}</h4>
 						</div>
 						<div
 							className='btn btn-dark m-4'

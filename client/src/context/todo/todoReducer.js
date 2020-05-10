@@ -12,6 +12,9 @@ import {
 	SORT_TODOS_ALPHABETICAL,
 	SORT_TODOS_DEADLINE,
 	SORT_TODOS_PRIORITY,
+	TODO_ERROR,
+	SUBTODO_ERROR,
+	GET_SUBTODOS,
 } from '../types';
 
 // Takes type enum form props and switches between them and enacts the update to state by payload
@@ -21,42 +24,60 @@ export default (state, action) => {
 			return {
 				...state,
 				todos: action.payload,
+				loading: false,
+			};
+
+		case GET_SUBTODOS:
+			return {
+				...state,
+				subTodos: action.payload,
+				loading: false,
 			};
 		case ADD_TODO:
 			return {
 				...state,
 				todos: [action.payload, ...state.todos],
+				loading: false,
 			};
 		case ADD_SUBTODO:
 			return {
 				...state,
 				subTodos: [action.payload, ...state.subTodos],
+				loading: false,
 			};
 		case DELETE_TODO:
 			return {
 				...state,
-				todos: state.todos.filter((todo) => todo.id !== action.payload),
+				todos: state.todos.filter((todo) => todo._id !== action.payload),
+				subTodos: state.subTodos.filter(
+					(subTodo) => subTodo.subTodoId !== action.payload
+				),
+				loading: false,
 			};
 		case DELETE_SUBTODO:
 			return {
 				...state,
 				subTodos: state.subTodos.filter(
-					(subTodo) => subTodo.id !== action.payload
+					(subTodo) => subTodo._id !== action.payload
 				),
+				loading: false,
 			};
 		case UPDATE_TODO:
+			console.log(action.payload.deadline);
 			return {
 				...state,
 				todos: state.todos.map((todo) =>
-					todo.id === action.payload.id ? action.payload : todo
+					todo._id === action.payload._id ? action.payload : todo
 				),
+				loading: false,
 			};
 		case UPDATE_SUBTODO:
 			return {
 				...state,
 				subTodos: state.subTodos.map((subTodo) =>
-					subTodo.id === action.payload.id ? action.payload : subTodo
+					subTodo._id === action.payload._id ? action.payload : subTodo
 				),
+				loading: false,
 			};
 		case SET_CURRENT:
 			return {
@@ -94,7 +115,6 @@ export default (state, action) => {
 			};
 		case SORT_TODOS_DEADLINE:
 			const sortedTodosDead = state.todos;
-			console.log(sortedTodosDead);
 			sortedTodosDead.sort((a, b) => {
 				if (a.deadline < b.deadline) {
 					return -1;
@@ -104,7 +124,6 @@ export default (state, action) => {
 				}
 				return 0;
 			});
-			console.log(sortedTodosDead);
 			return {
 				...state,
 				todos: sortedTodosDead,
@@ -116,6 +135,12 @@ export default (state, action) => {
 			return {
 				...state,
 				todos: sortedTodosPriority,
+			};
+		case TODO_ERROR:
+		case SUBTODO_ERROR:
+			return {
+				...state,
+				error: action.payload,
 			};
 		default:
 			return state;

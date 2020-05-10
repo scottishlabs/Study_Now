@@ -5,6 +5,10 @@ const SubTodoSchema = mongoose.Schema({
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'users',
 	},
+	subTodoId: {
+		type: String,
+		required: true,
+	},
 	name: {
 		type: String,
 		required: true,

@@ -1,6 +1,9 @@
-import React, { useState, useContext, useEffect } from 'react';
-import DateTimePicker from 'react-datetime-picker';
+import React, { useState, useContext } from 'react';
 import EventContext from '../../../../context/events/eventContext';
+import 'react-datepicker/dist/react-datepicker.css';
+import parseISO from 'date-fns/parseISO';
+import DatePicker from 'react-datepicker';
+import { useEffect } from 'react';
 
 const EditArea = ({ setIsAdd, setIsActive }) => {
 	const eventContext = useContext(EventContext);
@@ -15,22 +18,25 @@ const EditArea = ({ setIsAdd, setIsActive }) => {
 	} = eventContext;
 
 	const [form, setForm] = useState({
-		id: null,
-		start: null,
-		end: null,
-		title: '',
-		description: '',
+		...current,
+		start: parseISO(current.start),
+		end: parseISO(current.end),
 	});
 
-	const { id, start, end, title, description } = form;
+	const { start, end, title, description } = form;
 
-	useEffect(() => {
-		resetForms();
-	}, []);
+	// useEffect(() => {
+	// 	console.log(current);
+	// 	setForm({
+	// 		...form,
+	// 		start: parseISO(current.start),
+	// 		end: parseISO(current.end),
+	// 	});
+	// }, [parseISO(start)]);
 
 	const resetForms = () => {
 		setForm({
-			id: current.id,
+			...form,
 			start: current.start,
 			end: current.end,
 			title: current.title,
@@ -42,12 +48,12 @@ const EditArea = ({ setIsAdd, setIsActive }) => {
 		setForm({ ...form, [e.target.id]: e.target.value });
 	};
 
-	const startChange = (date) => {
-		setForm({ ...form, start: date });
+	const onChangeStart = (e) => {
+		setForm({ ...form, start: e });
 	};
 
-	const endChange = (date) => {
-		setForm({ ...form, end: date });
+	const onChangeEnd = (e) => {
+		setForm({ ...form, end: e });
 	};
 
 	const onSubmit = () => {
@@ -62,7 +68,7 @@ const EditArea = ({ setIsAdd, setIsActive }) => {
 	};
 
 	const onDelete = () => {
-		deleteEvent(current.id);
+		deleteEvent(current._id);
 		clearCurrentEvent();
 	};
 
@@ -99,25 +105,23 @@ const EditArea = ({ setIsAdd, setIsActive }) => {
 			</div>
 			<div className='form-group'>
 				<label htmlFor='start'>Start Date</label>
-				<DateTimePicker
+				<DatePicker
 					id='start'
-					value={start}
-					onChange={startChange}
-					maxDate={end}
+					selected={start}
+					onChange={(e) => onChangeStart(e)}
 					className='form-control'
-					clearIcon={null}
+					maxDate={end}
 					required
 				/>
 			</div>
 			<div className='form-group'>
 				<label htmlFor='end'>End Date</label>
-				<DateTimePicker
+				<DatePicker
 					id='end'
-					value={end}
-					onChange={endChange}
+					selected={end}
+					onChange={(e) => onChangeEnd(e)}
 					minDate={start}
 					className='form-control'
-					clearIcon={null}
 					required
 				/>
 			</div>

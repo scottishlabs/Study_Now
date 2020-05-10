@@ -4,6 +4,12 @@ import TodoContext from '../../../../context/todo/todoContext';
 
 // Handles the display of the todos from context
 const Todos = ({ setIsActive }) => {
+	useEffect(() => {
+		getTodos();
+		getSubTodos();
+		// eslint-disable-next-line
+	}, []);
+
 	const todoContext = useContext(TodoContext);
 	const {
 		todos,
@@ -14,6 +20,10 @@ const Todos = ({ setIsActive }) => {
 		prioritySort,
 		deadlineSort,
 		alphabeticalSort,
+		subTodos,
+		loading,
+		getTodos,
+		getSubTodos,
 	} = todoContext;
 
 	// Initial state for a new todo
@@ -23,7 +33,7 @@ const Todos = ({ setIsActive }) => {
 		isCompleted: false,
 		urgent: false,
 		important: false,
-		deadline: '',
+		deadline: new Date(),
 	});
 
 	// Initial state for the filter input
@@ -40,7 +50,7 @@ const Todos = ({ setIsActive }) => {
 				isCompleted: false,
 				urgent: false,
 				important: false,
-				deadline: '',
+				deadline: new Date(),
 			});
 		}
 	};
@@ -71,111 +81,129 @@ const Todos = ({ setIsActive }) => {
 
 	// Renders the todo list area
 	return (
-		<div className='todoListArea d-block m-auto col-lg-7'>
-			<div className='addTodo input-group'>
-				<input
-					placeholder='Add New To-do..'
-					type='text'
-					name='name'
-					maxLength='48'
-					value={newTodo.name}
-					onChange={(e) => setNewTodo({ ...newTodo, name: e.target.value })}
-					className='form-control'
-				/>
-				<div className='input-group-append'>
-					<button
-						type='submit'
-						className='btn btn-primary'
-						onClick={() => handleAddTodo()}
-					>
-						<i className='fas fa-plus'></i>
-					</button>
-				</div>
-			</div>
-			<div className='row w-100 ml-auto mb-3 mr-3 justify-content-between'>
-				<div className='col-4'>
-					<div className='input-group'>
-						<input
-							placeholder='Filter..'
-							type='text'
-							name='name'
-							maxLength='48'
-							value={filter}
-							onChange={(e) => setFilter(e.target.value)}
-							className='form-control'
-						/>
-						<div className='input-group-append'>
-							<button
-								type='submit'
-								className='btn btn-secondary'
-								onClick={() => filterTodos(filter)}
-							>
-								<i className='fas fa-search'></i>
-							</button>
-						</div>
+		<Fragment>
+			<div className='todoListArea d-block m-auto col-lg-7'>
+				<div className='addTodo input-group'>
+					<input
+						placeholder='Add New To-do..'
+						type='text'
+						name='name'
+						maxLength='48'
+						value={newTodo.name}
+						onChange={(e) => setNewTodo({ ...newTodo, name: e.target.value })}
+						className='form-control'
+					/>
+					<div className='input-group-append'>
+						<button
+							type='submit'
+							className='btn btn-primary'
+							onClick={() => handleAddTodo()}
+						>
+							<i className='fas fa-plus'></i>
+						</button>
 					</div>
 				</div>
-				<div className='col-4 p-0'>
-					<button
-						type='button'
-						className='btn btn-secondary'
-						onClick={() => handleClearFilter()}
-					>
-						Clear Filter
-					</button>
-				</div>
-				<div className='col-4'>
-					<div className='btn-group float-right'>
-						<button type='button' className='btn btn-secondary'>
-							Sort by
-						</button>
+				<div className='row w-100 ml-auto mb-3 mr-3 justify-content-between'>
+					<div className='col-4'>
+						<div className='input-group'>
+							<input
+								placeholder='Filter..'
+								type='text'
+								name='name'
+								maxLength='48'
+								value={filter}
+								onChange={(e) => setFilter(e.target.value)}
+								className='form-control'
+							/>
+							<div className='input-group-append'>
+								<button
+									type='submit'
+									className='btn btn-secondary'
+									onClick={() => filterTodos(filter)}
+								>
+									<i className='fas fa-search'></i>
+								</button>
+							</div>
+						</div>
+					</div>
+					<div className='col-4 p-0'>
 						<button
 							type='button'
-							className='btn btn-secondary dropdown-toggle dropdown-toggle-split'
-							data-toggle='dropdown'
-							aria-haspopup='true'
-							aria-expanded='false'
+							className='btn btn-secondary'
+							onClick={() => handleClearFilter()}
 						>
-							<span className='sr-only'>Toggle Dropdown</span>
+							Clear Filter
 						</button>
-						<div className='dropdown-menu dropdown-menu-right'>
-							<button
-								type='button'
-								className='dropdown-item'
-								onClick={() => handleSortAlphabetical()}
-							>
-								A-Z
+					</div>
+					<div className='col-4'>
+						<div className='btn-group float-right'>
+							<button type='button' className='btn btn-secondary'>
+								Sort by
 							</button>
 							<button
 								type='button'
-								className='dropdown-item'
-								onClick={() => handleSortPriority()}
+								className='btn btn-secondary dropdown-toggle dropdown-toggle-split'
+								data-toggle='dropdown'
+								aria-haspopup='true'
+								aria-expanded='false'
 							>
-								Priority
+								<span className='sr-only'>Toggle Dropdown</span>
 							</button>
-							<button
-								type='button'
-								className='dropdown-item'
-								onClick={() => handleSortDeadline()}
-							>
-								Deadline
-							</button>
+							<div className='dropdown-menu dropdown-menu-right'>
+								<button
+									type='button'
+									className='dropdown-item'
+									onClick={() => handleSortAlphabetical()}
+								>
+									A-Z
+								</button>
+								<button
+									type='button'
+									className='dropdown-item'
+									onClick={() => handleSortPriority()}
+								>
+									Priority
+								</button>
+								<button
+									type='button'
+									className='dropdown-item'
+									onClick={() => handleSortDeadline()}
+								>
+									Deadline
+								</button>
+							</div>
 						</div>
 					</div>
 				</div>
+				{todos !== null && subTodos !== null && !loading ? (
+					<div className='todoList'>
+						<ul className='list-group'>
+							{filtered !== null
+								? filtered.map((todo) => (
+										<TodoItem
+											key={todo._id}
+											todo={todo}
+											setIsActive={setIsActive}
+										/>
+								  ))
+								: todos.map((todo) => (
+										<TodoItem
+											key={todo._id}
+											todo={todo}
+											setIsActive={setIsActive}
+										/>
+								  ))}
+						</ul>
+					</div>
+				) : (
+					<div className='d-flex justify-content-center'>
+						<div className='spinner-border' role='status'>
+							<span className='sr-only'>Loading...</span>
+						</div>
+					</div>
+				)}
 			</div>
-			<div className='todoList'>
-				<ul className='list-group'>
-					{filtered !== null
-						? filtered.map((todo) => (
-								<TodoItem key={todo.id} todo={todo} setIsActive={setIsActive} />
-						  ))
-						: todos.map((todo) => (
-								<TodoItem key={todo.id} todo={todo} setIsActive={setIsActive} />
-						  ))}
-				</ul>
-			</div>
-		</div>
+		</Fragment>
 	);
 };
 

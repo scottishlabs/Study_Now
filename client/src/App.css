@@ -1,0 +1,14 @@
+.spinner-sm {
+	height: 1rem;
+	width: 1rem;
+}
+
+.spinner {
+	height: 3rem;
+	width: 3rem;
+}
+
+.spinner-lg {
+	height: 5rem;
+	width: 5rem;
+}

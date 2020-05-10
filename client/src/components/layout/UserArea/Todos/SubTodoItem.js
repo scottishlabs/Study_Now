@@ -12,17 +12,17 @@ const SubTodoItem = ({ subTodo }) => {
 
 	const [newSubTodo, setNewSubTodo] = useState(subTodo);
 
-	const { id, name, isCompleted } = newSubTodo;
+	const { _id, name, isCompleted } = newSubTodo;
 
 	// handles the delete of this sub todo from context and the display
 	const handleDeleteSubTodo = () => {
-		deleteSubTodo(id);
+		deleteSubTodo(_id);
 	};
 
 	// Updates context of the completed property of this sub todo
 	const handleCheck = () => {
 		setNewSubTodo({ ...newSubTodo, isCompleted: !isCompleted });
-		updateSubTodo(newSubTodo);
+		updateSubTodo({ ...newSubTodo, isCompleted: !isCompleted });
 	};
 
 	// Renders this sub todo item and populates the content from context
@@ -37,7 +37,7 @@ const SubTodoItem = ({ subTodo }) => {
 						<input
 							type='checkbox'
 							className='custom-control-input'
-							id={id}
+							id={_id}
 							checked={isCompleted}
 							onChange={handleCheck}
 						/>
@@ -48,7 +48,7 @@ const SubTodoItem = ({ subTodo }) => {
 									? { textDecoration: ' line-through' }
 									: { textDecoration: '' }
 							}
-							htmlFor={id}
+							htmlFor={_id}
 						>
 							{name}
 						</label>

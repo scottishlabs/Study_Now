@@ -1,39 +1,34 @@
-import React, { useState, useContext, Fragment } from 'react';
+import React, { useState, useContext, Fragment, useEffect } from 'react';
 import { CountdownCircleTimer } from 'react-countdown-circle-timer';
 import PomodoroContext from '../../../../context/pomodoroTimer/pomodoroContext';
 import moment from 'moment';
 import {
-	UPDATE_POMODORO_TIME,
-	UPDATE_BREAK_TIME,
-	UPDATE_LONG_BREAK_TIME,
+	GET_POMODORO_SETTINGS,
+	ADD_POMODORO_SETTINGS,
+	UPDATE_POMODORO_SETTINGS,
+	POMODORO_ERROR,
 } from '../../../../context/types';
 
 // Component that renders a todo timer and its settings
 const PomodoroTimer = () => {
 	const pomodoroContext = useContext(PomodoroContext);
-	const {
-		pomodoroTime,
-		breakTime,
-		longBreakTime,
-		updatePomodoroTime,
-		updateBreakTime,
-		updateLongBreakTime,
-	} = pomodoroContext;
+	const { pomodoroSettings, updatePomodoroSettings } = pomodoroContext;
 
 	// Initial state of the pomodoro timer settings
-	const [updateTime, setUpdateTime] = useState(pomodoroTime);
-	const [updateBreak, setUpdateBreak] = useState(breakTime);
-	const [updateLong, setUpdateLong] = useState(longBreakTime);
+	const [currentSettings, setCurrentSettings] = useState(pomodoroSettings);
+	const { pomodoroTime, breakTime, longBreakTime } = currentSettings;
 
 	// Default pomodoro timer settings
-	const [defaultTime, setDefaultTime] = useState(25);
-	const [defaultBreak, setDefaultBreak] = useState(5);
-	const [defaultLong, setDefaultLong] = useState(30);
+	const [defaultSettings, setDefaultSettings] = useState({
+		pomodoroTime: 25,
+		breakTime: 5,
+		longBreakTime: 30,
+	});
 
 	// The input states for the input of values to be stored
 	const [sessionNo, setSessionNo] = useState(0);
 	const [isBreak, setIsBreak] = useState(false);
-	const [timeRemaining, setTimeRemaining] = useState(updateTime * 60);
+	const [timeRemaining, setTimeRemaining] = useState(pomodoroTime * 60);
 
 	// State of whether the timer is counting down or not
 	const [isPlaying, setIsPlaying] = useState(false);
@@ -44,6 +39,7 @@ const PomodoroTimer = () => {
 	// Change whether the settings menu is open or not
 	const [isActive, setIsActive] = useState(false);
 
+	console.log(pomodoroSettings);
 	// Counts what study session the timer is on
 	const incSessionNo = () => {
 		const output = (sessionNo + 1) % 4;
@@ -64,7 +60,7 @@ const PomodoroTimer = () => {
 	const resetTimer = () => {
 		setSessionNo(0);
 		setIsBreak(false);
-		setTimeRemaining(updateTime * 60);
+		setTimeRemaining(pomodoroTime * 60);
 		setIsPlaying(false);
 		changeKey();
 	};
@@ -73,37 +69,40 @@ const PomodoroTimer = () => {
 	const onComplete = () => {
 		if (isBreak) {
 			setIsBreak(false);
-			setTimeRemaining(updateTime * 60);
+			setTimeRemaining(pomodoroTime * 60);
 			incSessionNo();
 		} else {
 			setIsBreak(true);
 			if (sessionNo === 3) {
-				setTimeRemaining(updateLong * 60);
+				setTimeRemaining(breakTime * 60);
 			} else {
-				setTimeRemaining(updateBreak * 60);
+				setTimeRemaining(longBreakTime * 60);
 			}
 		}
 		changeKey();
 		return [true, 10];
 	};
 
+	const onChange = (e) => {
+		setCurrentSettings({
+			...pomodoroSettings,
+			[e.target.id]: parseInt(e.target.value),
+		});
+	};
+
 	// Handles submission of new settings of the Pomodoro to context
 	const handleSubmit = () => {
-		updatePomodoroTime({ type: UPDATE_POMODORO_TIME, payload: updateTime });
-		updateBreakTime({ type: UPDATE_BREAK_TIME, payload: updateBreak });
-		updateLongBreakTime({ type: UPDATE_LONG_BREAK_TIME, payload: updateLong });
+		updatePomodoroSettings({
+			type: UPDATE_POMODORO_SETTINGS,
+			payload: currentSettings,
+		});
 		resetTimer();
 	};
 
 	// Resets the pomodoro timer to default settings in context
 	const handleReset = () => {
-		updatePomodoroTime({ type: UPDATE_POMODORO_TIME, payload: defaultTime });
-		updateBreakTime({ type: UPDATE_BREAK_TIME, payload: defaultBreak });
-		updateLongBreakTime({ type: UPDATE_LONG_BREAK_TIME, payload: defaultLong });
-		setUpdateTime(defaultTime);
-		setUpdateBreak(defaultBreak);
-		setUpdateLong(defaultLong);
-		changeKey();
+		setCurrentSettings({ ...defaultSettings, ...pomodoroSettings });
+		handleSubmit();
 	};
 
 	// Renders the countdown timer tex in the middle of the timer
@@ -112,7 +111,7 @@ const PomodoroTimer = () => {
 			return (
 				<div className='messageWrapper'>
 					<div className='message'>Long Break</div>
-					<div className='value'>
+					<div key={newKey} className='value'>
 						{moment(secondsToMilliseconds(value)).format('mm:ss')}
 					</div>
 					<div className='message'>Remaining</div>
@@ -123,7 +122,7 @@ const PomodoroTimer = () => {
 			return (
 				<div className='messageWrapper'>
 					<div className='message'>Short Break</div>
-					<div className='value'>
+					<div key={newKey} className='value'>
 						{moment(secondsToMilliseconds(value)).format('mm:ss')}
 					</div>
 					<div className='message'>Remaining</div>
@@ -133,7 +132,7 @@ const PomodoroTimer = () => {
 		return (
 			<div className='messageWrapper'>
 				<div className='message'>Study!</div>
-				<div className='value'>
+				<div key={newKey} className='value'>
 					{moment(secondsToMilliseconds(value)).format('mm:ss')}
 				</div>
 				<div className='message'>Remaining</div>
@@ -193,11 +192,11 @@ const PomodoroTimer = () => {
 							<label htmlFor='updateTime'>Study Time</label>
 							<input
 								type='number'
-								id='updateTime'
+								id='pomodoroTime'
 								min={1}
 								max={59}
-								value={updateTime}
-								onChange={(e) => setUpdateTime(parseInt(e.target.value))}
+								value={pomodoroTime}
+								onChange={onChange}
 								className='col w-100 p-0 pl-2 py-2'
 							/>
 						</div>
@@ -205,12 +204,12 @@ const PomodoroTimer = () => {
 							<label htmlFor='updateBreak'>Short Break Time</label>
 							<input
 								type='number'
-								id='updateBreak'
+								id='breakTime'
 								aria-label='Short Break Time'
 								min={1}
 								max={59}
-								value={updateBreak}
-								onChange={(e) => setUpdateBreak(parseInt(e.target.value))}
+								value={breakTime}
+								onChange={onChange}
 								className='col w-100 p-0 pl-2 py-2'
 							/>
 						</div>
@@ -218,12 +217,12 @@ const PomodoroTimer = () => {
 							<label htmlFor='updateLong'>Long Break Time</label>
 							<input
 								type='number'
-								id='updateLong'
+								id='longBreakTime'
 								aria-label='Long Break Time'
 								min={1}
 								max={59}
-								value={updateLong}
-								onChange={(e) => setUpdateLong(parseInt(e.target.value))}
+								value={longBreakTime}
+								onChange={onChange}
 								className='col w-100 p-0 pl-2 py-2'
 							/>
 						</div>

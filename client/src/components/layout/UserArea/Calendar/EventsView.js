@@ -17,7 +17,8 @@ const EventsView = ({ date }) => {
 	const currentEventsFilter = () => {
 		return events.filter(
 			(event) =>
-				date >= getDateOnly(event.start) && date <= getDateOnly(event.end)
+				date >= getDateOnly(new Date(event.start)) &&
+				date <= getDateOnly(new Date(event.end))
 		);
 	};
 
@@ -33,8 +34,14 @@ const EventsView = ({ date }) => {
 
 	return (
 		<div>
+			<div className='card'>
+				<div className='card-body text-dark text-center px-1 py-2'>
+					<i className='fas fa-lightbulb mr-2 text-warning'></i>
+					HINT: To view Todo deadlines, head to the Todo page.
+				</div>
+			</div>
 			{currentEvents.map((event) => (
-				<EventsViewItem key={event.id} event={event} />
+				<EventsViewItem key={event._id} event={event} />
 			))}
 		</div>
 	);

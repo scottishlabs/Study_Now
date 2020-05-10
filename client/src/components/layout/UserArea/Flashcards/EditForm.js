@@ -16,30 +16,16 @@ const EditForm = ({ setIsAdd, setIsActive }) => {
 		clearFilterFlashcards,
 	} = flashcardsContext;
 
-	const [form, setForm] = useState({
-		id: null,
-		title: '',
-		front: '',
-		back: '',
-	});
+	const [form, setForm] = useState(current);
 
-	useEffect(() => {
-		resetForms();
-	}, []);
-
-	const { id, title, front, back } = form;
+	const { title, front, back, isActive } = form;
 
 	const formChange = (e) => {
 		setForm({ ...form, [e.target.id]: e.target.value });
 	};
 
 	const resetForms = () => {
-		setForm({
-			id: current.id,
-			title: current.title,
-			front: current.front,
-			back: current.back,
-		});
+		setForm(current);
 	};
 
 	const onSubmit = () => {

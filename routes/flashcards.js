@@ -4,7 +4,7 @@ const { check, validationResult } = require('express-validator');
 const auth = require('../middleware/auth');
 
 const User = require('../models/User');
-const Flashcard = require('../models/SubTodo');
+const Flashcard = require('../models/Flashcard');
 
 // @route    GET api/flashcards
 // @desc     Get all users/flashcards

@@ -20,6 +20,8 @@ import PageNotFound from './components/pages/PageNotFound';
 import PrivateRoute from './components/routing/PrivateRoute';
 import Alerts from './components/layout/Alerts';
 
+import './App.css';
+
 const App = () => {
 	//Single page application switcher for each page in the application
 	return (
