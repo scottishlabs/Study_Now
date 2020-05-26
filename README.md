@@ -23,7 +23,7 @@ npm client-install
 
 Edit the /config/default.json file to include the correct MonogoDB URI if you want your own database
 
-### Run server
+## Run server
 
 ```bash
 npm run dev     # Express & React :3000 & :5000
