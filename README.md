@@ -19,11 +19,11 @@ npm install
 npm client-install
 ```
 
-### Mongo connection setup
+### Mongo Connection Setup
 
 Edit the /config/default.json file to include the correct MonogoDB URI if you want your own database
 
-## Run server
+## Run Server
 
 ```bash
 npm run dev     # Express & React :3000 & :5000
