@@ -1,4 +1,4 @@
-# Study Now, a mobile-first, responsive study application
+# Study Now
 
 > Study now is a responsive mobile first web application suited towards students to help organise their studies at whatever level of education they are at. This application includes features such as a To-do list, a calendar, a Pomodoro Timer, a Flashcard system.
 
