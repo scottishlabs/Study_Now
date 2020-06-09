@@ -13,11 +13,13 @@ You must have NPM installed as well as Node.js
 You must create your own MongoDB database (There is a free tier). This is for security reasons as the account username and password is omitted.
 ### Setup
 
-Install dependencies
-
+Install server dependencies
 ```bash
 npm install
+```
 
+Install client dependencies
+```bash
 cd client
 npm install
 ```
