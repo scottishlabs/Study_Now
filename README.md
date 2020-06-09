@@ -10,18 +10,21 @@ The deployed final product can be found [here](https://blooming-savannah-59517.h
 
 You must have NPM installed as well as Node.js
 
+You must create your own MongoDB database (There is a free tier). This is for security reasons as the account username and password is omitted.
 ### Setup
 
 Install dependencies
 
 ```bash
 npm install
-npm client-install
+
+cd client
+npm install
 ```
 
 ### Mongo Connection Setup
 
-Edit the /config/default.json file to include the correct MonogoDB URI if you want your own database
+Edit the /config/default.json.sample and /config/production.json.sample files to include the correct MonogoDB URI your own database and then remove the .sample extention from each file.
 
 ## Run Server
 
