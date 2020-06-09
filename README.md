@@ -28,7 +28,7 @@ npm install
 
 Edit the /config/default.json.sample and /config/production.json.sample files to include the correct MonogoDB URI your own database and then remove the .sample extention from each file.
 
-## Run Server
+## Running the client and server
 
 ```bash
 npm run dev     # Express & React :3000 & :5000
