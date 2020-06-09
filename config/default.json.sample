@@ -1,1 +1,4 @@
-
+{
+	"mongoURI": "mongodb+srv://<USERNAME>:<PASSWORD>@maindatabase-zgnth.mongodb.net/test?retryWrites=true&w=majority",
+	"jwtSecret": "secret"
+}
