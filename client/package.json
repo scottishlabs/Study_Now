@@ -48,7 +48,7 @@
 		"react-geosuggest": "^2.12.1",
 		"react-input-number": "^5.0.18",
 		"react-router-dom": "^5.1.2",
-		"react-scripts": "3.3.0",
+		"react-scripts": "3.4.1",
 		"react-transition-group": "^4.3.0",
 		"uuid": "^3.4.0"
 	},

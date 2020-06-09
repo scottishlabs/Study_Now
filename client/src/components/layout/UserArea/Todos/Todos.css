@@ -30,7 +30,8 @@ input#deadline {
 	overflow-y: scroll;
 	border: 5px solid var(--border-color);
 	border-radius: 3px;
-	background-color: var(--border-color);
+  background-color: var(--border-color);
+  scrollbar-width: none;
 }
 
 .todoList::-webkit-scrollbar {
@@ -82,7 +83,8 @@ input#deadline {
 
 .todoForm {
 	max-height: 100vh;
-	overflow-y: scroll;
+  overflow-y: scroll;
+  scrollbar-width: none;
 }
 
 .todoForm::-webkit-scrollbar {
