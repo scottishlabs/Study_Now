@@ -1,6 +1,6 @@
-import { createContext } from 'react';
+import { createContext } from "react";
 
-// Creates context for todo page 
+// Creates context for todo page
 const todoContext = createContext();
 
 export default todoContext;

@@ -1,3 +1,9 @@
+html{}
+
+body {
+  background-color: #f6f6f6;
+}
+
 .spinner-sm {
 	height: 1rem;
 	width: 1rem;
@@ -12,3 +18,4 @@
 	height: 5rem;
 	width: 5rem;
 }
+

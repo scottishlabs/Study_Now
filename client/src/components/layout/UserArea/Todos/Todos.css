@@ -26,11 +26,10 @@ input#deadline {
 }
 
 .todoList {
-	height: calc(100% - 70px - 70px);
 	overflow-y: scroll;
-	border: 5px solid var(--border-color);
-	border-radius: 3px;
-  background-color: var(--border-color);
+	/* border: 5px solid var(--border-color); */
+	/* border-radius: 3px; */
+
   scrollbar-width: none;
 }
 
@@ -39,7 +38,7 @@ input#deadline {
 }
 
 .addTodo {
-	padding: 1rem 1rem 1rem 8rem;
+	padding: 1rem 1rem 1rem 1rem;
 	background-color: #f9f9f9;
 }
 
@@ -69,8 +68,8 @@ input#deadline {
 
 .todoFormWrapper {
 	z-index: 99;
-	height: 100vh !important;
 	display: none;
+  height:100%;
 	position: absolute;
 	right: 0;
 	top: 0;
@@ -96,6 +95,16 @@ input#deadline {
 	top: 0;
 	right: 0;
 	font-size: 2rem;
+}
+
+.buttonNoFocus.btn{
+  outline: none;
+  box-shadow: none;
+}
+
+.buttonNoFocus.btn:focus{
+  outline: none;
+  box-shadow: none;
 }
 
 @media (min-width: 992px) {

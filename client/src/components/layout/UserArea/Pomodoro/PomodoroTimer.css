@@ -1,6 +1,6 @@
 /*Pomodoro Area Container*/
 .wrapper {
-	height: 100vh;
+	height: 100%;
 }
 
 /* Pomodoro Timer */
@@ -26,8 +26,6 @@
 }
 
 .settingsBtn {
-	top: 0;
-	right: 0;
 	font-size: 2rem;
 }
 

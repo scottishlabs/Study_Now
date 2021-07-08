@@ -11,14 +11,17 @@ The deployed final product can be found **[HERE](https://blooming-savannah-59517
 - You **_must_** have NPM installed as well as Node.js
 
 - You **_must_** create your own MongoDB database (There is a free tier). This is for security reasons as the account username and password is omitted.
+
 ### Setup
 
 Install server dependencies
+
 ```bash
 npm install
 ```
 
 Install client dependencies
+
 ```bash
 cd client
 npm install

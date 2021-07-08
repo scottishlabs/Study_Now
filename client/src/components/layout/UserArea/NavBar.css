@@ -6,11 +6,11 @@ a:focus {
 	transition: all 0.3s;
 }
 
-.topbar {
+/* .topbar {
 	position: absolute;
 	top: 0;
 	z-index: 90;
-}
+} */
 
 i,
 span {

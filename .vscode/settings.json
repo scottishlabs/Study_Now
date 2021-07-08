@@ -1,5 +1,10 @@
 {
-  "cSpell.words": [
-    "Todos"
+  "cSpell.words": ["Todos"],
+  "eslint.workingDirectories": ["./client"],
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
   ]
 }

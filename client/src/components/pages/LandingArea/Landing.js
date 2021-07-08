@@ -1,15 +1,15 @@
-import React, { Fragment } from 'react';
-import LandingArea from '../../layout/LandingArea/Landing/LandingArea';
-import '../../layout/LandingArea/Landing/Landing.css';
-import Alerts from '../../layout/Alerts';
+import React, { Fragment } from "react";
+import LandingArea from "../../layout/LandingArea/Landing/LandingArea";
+import "../../layout/LandingArea/Landing/Landing.css";
+import Alert from "../../layout/Alert";
 
 // Renders the landing page
 const Landing = () => {
-	return (
-		<Fragment>
-			<LandingArea />
-		</Fragment>
-	);
+  return (
+    <>
+      <LandingArea />
+    </>
+  );
 };
 
 export default Landing;

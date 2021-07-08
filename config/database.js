@@ -3,17 +3,17 @@ const config = require("config");
 const database = config.get("mongoURI");
 
 const connectDatabase = async () => {
-	try {
-		await mongoose.connect(database, {
-			useNewUrlParser: true,
-			useUnifiedTopology: true,
-			useCreateIndex: true
-		});
-		console.log("SUCCESS! ... Connected to MongoDB");
-	} catch (err) {
-		console.error(err.message);
-		process.exit(1);
-	}
+  try {
+    await mongoose.connect(database, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      useCreateIndex: true,
+    });
+    console.log("SUCCESS! ... Connected to MongoDB");
+  } catch (err) {
+    console.error(err.message);
+    process.exit(1);
+  }
 };
 
 module.exports = connectDatabase;

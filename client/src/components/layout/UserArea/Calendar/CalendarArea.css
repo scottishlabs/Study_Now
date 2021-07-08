@@ -81,12 +81,9 @@ main {
 }
 
 .calendar {
-	display: block;
-	position: relative;
 	width: 100%;
 	background: var(--neutral-color);
 	border: 1px solid var(--border-color);
-	height: calc(100vh - 70px);
 }
 
 .calendar .header {
@@ -126,7 +123,6 @@ main {
 }
 .calendar .body {
 	flex-grow: 1;
-	height: calc(100% - 92.73px - 34.46px - 3rem);
 }
 .calendar .body .cell {
 	position: relative;
@@ -136,7 +132,6 @@ main {
 	background: var(--neutral-color);
 	transition: 0.25s ease-out;
 	flex: 1;
-	height: 100%;
 	padding-bottom: 1rem;
 	scrollbar-width: none;
 }
@@ -159,7 +154,7 @@ main {
 .calendar .body .row {
 	border-bottom: 1px solid var(--border-color);
 	flex: 1;
-	height: calc((100% / 6));
+  height: 12vh;
 }
 
 .calendar .body .cell:last-child {
@@ -193,13 +188,13 @@ main {
 	opacity: 0;
 	top: 0;
 	right: 0;
-	height: 100vh;
 	overflow-y: scroll;
 	-webkit-box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, 0.75);
 	-moz-box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, 0.75);
 	box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, 0.75);
 	transition: opacity 0.2s, visibility 0.2s;
 	scrollbar-width: none;
+  height:100vh
 }
 
 .addEditWrapperCalendar::-webkit-scrollbar {
@@ -210,9 +205,6 @@ main {
 	visibility: visible;
 	opacity: 1;
 	width: 100%;
-}
-.containerWrap {
-	position: relative;
 }
 
 .react-datetime-picker__wrapper {
@@ -226,7 +218,6 @@ main {
 }
 
 .dateEvents {
-	height: 90px;
 	overflow-y: scroll;
 	scrollbar-width: none;
 }
@@ -241,7 +232,6 @@ main {
 
 .events-sm {
 	margin: auto;
-	height: 1rem;
 	width: 1rem;
 	background-color: var(--main-color);
 	border-radius: 50%;
@@ -251,6 +241,10 @@ main {
 .events-sm-container {
 	width: 100%;
 	display: block;
+}
+
+.containerWrap {
+  height:100%
 }
 
 @media (min-width: 768px) {
@@ -264,5 +258,6 @@ main {
 	.addEditWrapperCalendar.active {
 		width: 34.7%;
 		transition: all 0.2s;
+    height:100%
 	}
 }
